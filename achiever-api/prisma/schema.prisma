@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Game {
+  id            Int      @id @default(autoincrement())
+  steamAppId    Int?
+  name          String   @unique
+  description   String?
+  releaseDate   DateTime?
+  imageUrl      String?
+  published     Boolean  @default(false)
+  guides        Guide[]
+  achievements  Achievement[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Guide {
+  id                Int      @id @default(autoincrement())
+  gameId            Int
+  game              Game     @relation(fields: [gameId], references: [id])
+  guideAchievements GuideAchievement[]
+  title             String
+  description       String?
+  published         Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Achievement {
+  id                    Int       @id @default(autoincrement())
+  gameId                Int
+  game                  Game      @relation(fields: [gameId], references: [id])
+  guideAchievements     GuideAchievement[]
+  userProgress          UserProgress[]
+  name                  String
+  description           String?
+  steamAchievementId    String?
+  iconUrl               String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model GuideAchievement {
+  id                        Int                 @id @default(autoincrement())
+  guideId                   Int
+  achievementId             Int
+  orderInTree               Int
+  parentGuideAchievementId  Int?
+  notes                     String?
+
+  guide                     Guide               @relation(fields: [guideId], references: [id])
+  achievement               Achievement         @relation(fields: [achievementId], references: [id])
+  parent                    GuideAchievement?   @relation("ParentChild", fields: [parentGuideAchievementId], references: [id])
+  children                  GuideAchievement[]  @relation("ParentChild")
+  createdAt                 DateTime            @default(now())
+  updatedAt                 DateTime            @updatedAt
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  username String @unique
+  passwordHash String
+  userProgress UserProgress[]
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
+
+model UserProgress {
+  id Int @id @default(autoincrement())
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  achievementId Int
+  achievement Achievement @relation(fields: [achievementId], references: [id])
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+}
