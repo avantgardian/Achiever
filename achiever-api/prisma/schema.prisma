@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -71,21 +70,22 @@ model GuideAchievement {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  email String @unique
-  username String @unique
-  passwordHash String
-  userProgress UserProgress[]
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+  id            Int             @id @default(autoincrement())
+  email         String          @unique
+  username      String          @unique
+  passwordHash  String
+  userProgress  UserProgress[]
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
 }
 
 model UserProgress {
-  id Int @id @default(autoincrement())
-  userId Int
-  user User @relation(fields: [userId], references: [id])
+  id            Int             @id @default(autoincrement())
+  userId        Int
+  user          User            @relation(fields: [userId], references: [id])
   achievementId Int
-  achievement Achievement @relation(fields: [achievementId], references: [id])
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
+  achievement   Achievement     @relation(fields: [achievementId], references: [id])
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  completedAt   DateTime
 }
