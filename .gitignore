@@ -45,3 +45,6 @@ temp/
 Thumbs.db
 .DS_Store
 
+# Planning & draft files (keep local)
+CONCEPTS.md
+
