@@ -32,6 +32,17 @@ function renderGames(games) {
     });
 
     gamesGrid.innerHTML = allGameCards;
+
+    // Initialize tooltips for the newly rendered cards
+    initializeTooltips();
+}
+
+function initializeTooltips() {
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 }
 
 async function fetchGames() {
