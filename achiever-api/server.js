@@ -25,8 +25,36 @@ app.get('/api/guides', (req, res) => {
     res.send({'message': 'Guides API is running'});
 });
 
-app.get('/api/achievements', (req, res) => {
-    res.send({'message': 'Achievements API is running'});
+// Get all achievements for a specific game
+app.get('/api/games/:gameId/achievements', async (req, res) => {
+    try {
+        const gameId = parseInt(req.params.gameId);
+        
+        const achievements = await prisma.achievement.findMany({
+            where: { gameId },
+            orderBy: { steamAchievementId: 'asc' }
+        });
+        
+        res.json(achievements);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch achievements' });
+    }
+});
+
+// Test with Game info
+app.get('/api/achievements/:id', async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+
+        const achievement = await prisma.achievement.findUnique({
+            where: { id },
+            include: { game: true }
+        });
+
+        res.json(achievement);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch achievements' });
+    }
 });
 
 app.listen(PORT, () => {
