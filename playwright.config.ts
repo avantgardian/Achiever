@@ -74,15 +74,19 @@ export default defineConfig({
   webServer: [
     {
       command: 'cd achiever-api && npm run dev',
-      url: 'http://localhost:3000',
+      url: 'http://localhost:3000/api/games',
       reuseExistingServer: !process.env.CI,
       timeout: 120 * 1000,
+      stdout: 'pipe',
+      stderr: 'pipe',
     },
     {
-      command: 'http-server achiever-frontend -p 8080 -c-1',
+      command: 'npx http-server achiever-frontend -p 8080 -c-1',
       url: 'http://localhost:8080',
       reuseExistingServer: !process.env.CI,
       timeout: 120 * 1000,
+      stdout: 'pipe',
+      stderr: 'pipe',
     },
   ],
 });
