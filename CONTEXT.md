@@ -189,27 +189,36 @@ User
   - `npm run test:headed` - Run tests with visible browser
   - `npm run backend` - Manually start backend API
   - `npm run frontend` - Manually start frontend server
-- ✅ tests/ folder created with example test file
+- ✅ Homepage tests created and passing:
+  - tests/homepage.spec.ts with 3 tests
+  - Page loads successfully (title check)
+  - Search bar is visible
+  - Game cards render from API
+  - All 9 tests passing (3 tests × 3 browsers)
+
+**Steam API Integration & Achievements:**
+- ✅ Steam Web API key secured in .env file
+- ✅ Year Walk steamAppId corrected (269050)
+- ✅ Achievement seeding script created (seed-year-walk-achievements.js):
+  - Fetches achievements from Steam API
+  - Populates database with all achievement data
+  - Prevents duplicates on re-run
+  - Includes name, description, Steam ID, and icon URLs
+- ✅ 10 Year Walk achievements successfully populated
+- ✅ New API endpoints implemented:
+  - GET /api/games/:gameId/achievements - All achievements for a game
+  - GET /api/achievements/:id - Single achievement with game data included
+- ✅ Prisma concepts learned: findMany, findUnique, where, orderBy, include (relationships/JOINs)
 
 ### Next Steps 📋
 
-**Testing (Current Focus):**
-1. **Write first Playwright tests**
-   - Test that homepage loads successfully
-   - Test that search bar is visible and functional
-   - Test that game cards render correctly
-   - Test tooltips appear on hover
-   
-2. **Add more comprehensive tests**
-   - Test API integration (games load from backend)
-   - Test error handling scenarios
-   - Test responsive design on mobile viewports
-   - Test cross-browser compatibility
+**Frontend Development (Current Focus):**
+1. **Display achievements on frontend**
+   - Create game detail page
+   - Show Year Walk achievements with icons
+   - Achievement cards with descriptions
+   - Link from homepage to game detail page
 
-**Frontend Development:**
-1. ✅ **Initialize Bootstrap tooltips** - COMPLETED
-   - Tooltips added to stat icons with hover explanations
-   
 2. **Implement search functionality**
    - Filter games array as user types
    - Re-render grid with filtered results
@@ -222,16 +231,10 @@ User
    - Handle network errors gracefully
 
 **API Development:**
-1. **Add error handling to existing endpoint**
-   - Try-catch blocks for database errors
-   - Proper HTTP status codes (404, 500, etc.)
-   - Meaningful error messages
-
-2. **Build more public endpoints**
+1. **Build more public endpoints**
    - GET /api/games/:gameId - Get single game with details
    - GET /api/games/:gameId/guides - Get all guides for a game
    - GET /api/guides/:guideId - Get guide with achievement tree
-   - GET /api/games/:gameId/achievements - Get all achievements for a game
 
 3. **Install authentication packages**
    - `npm install bcrypt jsonwebtoken`
@@ -262,24 +265,32 @@ User
    - Auto-populate database with Steam data
 
 ### Files Created
-- `achiever-api/server.js` - Express server with Prisma integration
+- `achiever-api/server.js` - Express server with Prisma integration and achievement endpoints
+- `achiever-api/seed-year-walk-achievements.js` - Steam API seeding script for achievements
 - `achiever-api/package.json` - Dependencies and scripts
-- `achiever-api/.env` - Environment variables with Railway DATABASE_URL (not in git)
+- `achiever-api/.env` - Environment variables (DATABASE_URL, STEAM_API_KEY) - not in git
 - `achiever-api/prisma/schema.prisma` - Complete database schema (6 models)
 - `achiever-api/prisma/migrations/20251001104326_init/` - Initial migration SQL
 - `achiever-frontend/index.html` - Main frontend HTML with Bootstrap
 - `achiever-frontend/css/style.css` - Custom dark theme styling
 - `achiever-frontend/js/app.js` - Frontend JavaScript with API integration
 - `playwright.config.ts` - Playwright testing configuration
-- `tests/example.spec.ts` - Example Playwright test file
+- `tests/homepage.spec.ts` - Homepage E2E tests (3 tests, all passing)
 - `package.json` - Root package with Playwright dependencies and test scripts
 - `.gitignore` - Comprehensive ignore rules for monorepo
 - `CONTEXT.md` - Project documentation (this file)
+- `CONCEPTS.md` - Learning notes and technical concepts
 
 ### Current Status 🎯
-- **Database**: Live on Railway PostgreSQL with all tables created
-- **API**: One working endpoint (`/api/games`) with database integration
+- **Database**: Live on Railway PostgreSQL
+  - 1 Game (Year Walk) with correct Steam App ID
+  - 10 Achievements populated from Steam API
+- **API**: Three working endpoints
+  - GET /api/games - List all games
+  - GET /api/games/:gameId/achievements - All achievements for a game
+  - GET /api/achievements/:id - Single achievement with game data
 - **Frontend**: Professional dark-themed UI with dynamic game cards, tooltips, and responsive design
-- **Testing**: Playwright E2E testing framework configured and ready to use
-- **Git**: All progress backed up on GitHub (6+ commits)
-- **Next**: Write first Playwright tests, implement search functionality, add error handling
+- **Testing**: Playwright E2E framework with 9 passing tests (3 tests × 3 browsers)
+- **Steam Integration**: API key secured, seeding script ready for more games
+- **Git**: All progress backed up on GitHub (9 commits)
+- **Next**: Display achievements on frontend, implement search functionality
