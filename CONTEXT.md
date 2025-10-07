@@ -11,6 +11,10 @@
 *Database:*
 - PostgreSQL (via Railway)
 
+*Testing:*
+- Playwright (End-to-end testing)
+- http-server (Local frontend serving for tests)
+
 ## Frontend Structure
 *Public Features:*
 - Browse/search games directory (with pagination/lazy loading)
@@ -171,9 +175,38 @@ User
   - Loading states with Bootstrap spinners
   - Clean semantic HTML structure
 
+**Testing Infrastructure:**
+- ✅ Playwright testing framework installed and configured
+- ✅ http-server installed for serving frontend during tests
+- ✅ playwright.config.ts configured with:
+  - baseURL set to `http://localhost:8080` (frontend)
+  - webServer array to auto-start both backend (port 3000) and frontend (port 8080)
+  - Tests configured for Chromium, Firefox, and WebKit browsers
+  - Trace collection on test failures for debugging
+- ✅ Root package.json scripts added:
+  - `npm test` - Run all tests (auto-starts servers)
+  - `npm run test:ui` - Run tests with interactive UI
+  - `npm run test:headed` - Run tests with visible browser
+  - `npm run backend` - Manually start backend API
+  - `npm run frontend` - Manually start frontend server
+- ✅ tests/ folder created with example test file
+
 ### Next Steps 📋
 
-**Frontend Development (Current Focus):**
+**Testing (Current Focus):**
+1. **Write first Playwright tests**
+   - Test that homepage loads successfully
+   - Test that search bar is visible and functional
+   - Test that game cards render correctly
+   - Test tooltips appear on hover
+   
+2. **Add more comprehensive tests**
+   - Test API integration (games load from backend)
+   - Test error handling scenarios
+   - Test responsive design on mobile viewports
+   - Test cross-browser compatibility
+
+**Frontend Development:**
 1. ✅ **Initialize Bootstrap tooltips** - COMPLETED
    - Tooltips added to stat icons with hover explanations
    
@@ -234,6 +267,12 @@ User
 - `achiever-api/.env` - Environment variables with Railway DATABASE_URL (not in git)
 - `achiever-api/prisma/schema.prisma` - Complete database schema (6 models)
 - `achiever-api/prisma/migrations/20251001104326_init/` - Initial migration SQL
+- `achiever-frontend/index.html` - Main frontend HTML with Bootstrap
+- `achiever-frontend/css/style.css` - Custom dark theme styling
+- `achiever-frontend/js/app.js` - Frontend JavaScript with API integration
+- `playwright.config.ts` - Playwright testing configuration
+- `tests/example.spec.ts` - Example Playwright test file
+- `package.json` - Root package with Playwright dependencies and test scripts
 - `.gitignore` - Comprehensive ignore rules for monorepo
 - `CONTEXT.md` - Project documentation (this file)
 
@@ -241,6 +280,6 @@ User
 - **Database**: Live on Railway PostgreSQL with all tables created
 - **API**: One working endpoint (`/api/games`) with database integration
 - **Frontend**: Professional dark-themed UI with dynamic game cards, tooltips, and responsive design
-- **Testing**: Prisma Studio for manual data management
-- **Git**: All progress backed up on GitHub (6 commits)
-- **Next**: Implement search functionality, add error handling, build more API endpoints
+- **Testing**: Playwright E2E testing framework configured and ready to use
+- **Git**: All progress backed up on GitHub (6+ commits)
+- **Next**: Write first Playwright tests, implement search functionality, add error handling

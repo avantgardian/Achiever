@@ -1,0 +1,30 @@
+{
+  "name": "achiever",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "backend": "cd achiever-api && npm run dev",
+    "frontend": "http-server achiever-frontend -p 8080 -c-1",
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test --ui",
+    "test:headed": "npx playwright test --headed"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/avantgardian/Achiever.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/avantgardian/Achiever/issues"
+  },
+  "homepage": "https://github.com/avantgardian/Achiever#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^24.7.0",
+    "http-server": "^14.1.1"
+  }
+}
