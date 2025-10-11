@@ -18,7 +18,8 @@ app.get('/api/games', async (req, res) => {
         include: {
             _count: {
                 select: {
-                    achievements: true
+                    achievements: true,
+                    guides: true
                 }
             }
         }
