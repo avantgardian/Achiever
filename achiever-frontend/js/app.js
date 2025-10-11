@@ -15,7 +15,7 @@ function renderGames(games) {
                         <h5 class="card-title">${game.name}</h5>
                         <div class="stats-row">
                             <span class="stat-item" data-bs-toggle="tooltip" title="Number of Achievements">
-                                <i class="bi bi-trophy-fill"></i> 0
+                                <i class="bi bi-trophy-fill"></i> ${game._count.achievements}
                             </span>
                             <span class="stat-item" data-bs-toggle="tooltip" title="Number of Guides">
                                 <i class="bi bi-book-fill"></i> 0

@@ -14,8 +14,13 @@ app.use(express.json());
 // Routes
 app.get('/api/games', async (req, res) => {
     const gameList = await prisma.game.findMany({
-        where: {
-            published: true
+        where: { published: true },
+        include: {
+            _count: {
+                select: {
+                    achievements: true
+                }
+            }
         }
     });
     res.json(gameList);
