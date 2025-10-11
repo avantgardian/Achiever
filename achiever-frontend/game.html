@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Year Walk - Achiever</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/game.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="game-nav">
+        <div class="container">
+            <div class="nav-content">
+                <a href="index.html" class="nav-back">
+                    <i class="bi bi-arrow-left"></i>
+                    <span>Back to Games</span>
+                </a>
+                <div class="nav-brand">ACHIEVER</div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Game Header Section -->
+    <section class="game-header">
+        <div class="game-header-bg"></div>
+        <div class="container">
+            <div class="game-header-content">
+                <div class="row g-4 align-items-center">
+                    <div class="col-lg-4">
+                        <div class="game-image-wrapper">
+                            <img src="https://cdn.cloudflare.steamstatic.com/steam/apps/269050/header.jpg" 
+                                 alt="Year Walk" 
+                                 class="game-image">
+                            <div class="game-image-glow"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="game-info">
+                            <h1 class="game-title">Year Walk</h1>
+                            <p class="game-description">
+                                Experience the ancient Swedish phenomena of year walking through a different kind of first person adventure that blurs the line between two and three dimensions as well as between reality and the supernatural.
+                            </p>
+                            <div class="game-stats-grid">
+                                <div class="game-stat-card">
+                                    <i class="bi bi-trophy-fill stat-icon"></i>
+                                    <div class="stat-content">
+                                        <div class="stat-value">10</div>
+                                        <div class="stat-label">Achievements</div>
+                                    </div>
+                                </div>
+                                <div class="game-stat-card">
+                                    <i class="bi bi-book-fill stat-icon"></i>
+                                    <div class="stat-content">
+                                        <div class="stat-value">0</div>
+                                        <div class="stat-label">Guides</div>
+                                    </div>
+                                </div>
+                                <div class="game-stat-card">
+                                    <i class="bi bi-calendar-fill stat-icon"></i>
+                                    <div class="stat-content">
+                                        <div class="stat-value">2013</div>
+                                        <div class="stat-label">Released</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section class="achievements-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="bi bi-trophy-fill"></i>
+                    Achievements
+                </h2>
+                <div class="achievement-progress">
+                    <span class="progress-text">0 / 10 Unlocked</span>
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-bar-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="achievements-grid">
+                <!-- Achievement 1 -->
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/269050/aafff2144be5356563e6c8f2fc3ad407c0b59fdb.jpg" 
+                             alt="Achievement Icon">
+                    </div>
+                    <div class="achievement-content">
+                        <h3 class="achievement-name">New Year</h3>
+                        <p class="achievement-desc">Year walk on New Year's eve.</p>
+                    </div>
+                    <div class="achievement-status">
+                        <div class="status-badge locked">
+                            <i class="bi bi-lock-fill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 2 -->
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/269050/acf6bda65c5ad33d84b064a2209728d9bb2cb469.jpg" 
+                             alt="Achievement Icon">
+                    </div>
+                    <div class="achievement-content">
+                        <h3 class="achievement-name">No Clues</h3>
+                        <p class="achievement-desc">Do a full year walk without any hints.</p>
+                    </div>
+                    <div class="achievement-status">
+                        <div class="status-badge locked">
+                            <i class="bi bi-lock-fill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 3 -->
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/269050/8cc954c11485323f6780bdab1d671e12724ab9d5.jpg" 
+                             alt="Achievement Icon">
+                    </div>
+                    <div class="achievement-content">
+                        <h3 class="achievement-name">Lost</h3>
+                        <p class="achievement-desc">Do a full year walk without looking at the map.</p>
+                    </div>
+                    <div class="achievement-status">
+                        <div class="status-badge locked">
+                            <i class="bi bi-lock-fill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 4 -->
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/269050/38a97f5cb3ca319ec70e6037cc3508a01ef56a8e.jpg" 
+                             alt="Achievement Icon">
+                    </div>
+                    <div class="achievement-content">
+                        <h3 class="achievement-name">Year Run</h3>
+                        <p class="achievement-desc">Do a full year walk in 20 minutes.</p>
+                    </div>
+                    <div class="achievement-status">
+                        <div class="status-badge locked">
+                            <i class="bi bi-lock-fill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 5 -->
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/269050/2a1e067e2598720a2f9d2c59541ef34ed8de1216.jpg" 
+                             alt="Achievement Icon">
+                    </div>
+                    <div class="achievement-content">
+                        <h3 class="achievement-name">Cheat Walk</h3>
+                        <p class="achievement-desc">Do a full year walk without uncovering the secrets of the rune and the doll. The grim will visit your dreams.</p>
+                    </div>
+                    <div class="achievement-status">
+                        <div class="status-badge locked">
+                            <i class="bi bi-lock-fill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 6 -->
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/269050/1547af5f33f5c8136bc505a61e60cb8def4c1867.jpg" 
+                             alt="Achievement Icon">
+                    </div>
+                    <div class="achievement-content">
+                        <h3 class="achievement-name">OWL 6</h3>
+                        <p class="achievement-desc">The owls sing a song that they learned in the lobby of a castle on a remote island.</p>
+                    </div>
+                    <div class="achievement-status">
+                        <div class="status-badge locked">
+                            <i class="bi bi-lock-fill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 7 -->
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/269050/748e3063a53bfaf1c860295ebfdf6ad12908016b.jpg" 
+                             alt="Achievement Icon">
+                    </div>
+                    <div class="achievement-content">
+                        <h3 class="achievement-name">Watchers' Stone Cryptogram</h3>
+                        <p class="achievement-desc">MYL1NGBRO0KHORSEN1GHTRAVENHULDR4</p>
+                    </div>
+                    <div class="achievement-status">
+                        <div class="status-badge locked">
+                            <i class="bi bi-lock-fill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 8 -->
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/269050/51d4658d771c86e76362c56cf758504fa7ad969b.jpg" 
+                             alt="Achievement Icon">
+                    </div>
+                    <div class="achievement-content">
+                        <h3 class="achievement-name">Clockwise Minute Box</h3>
+                        <p class="achievement-desc">48, 30, 42, 30, 18</p>
+                    </div>
+                    <div class="achievement-status">
+                        <div class="status-badge locked">
+                            <i class="bi bi-lock-fill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 9 -->
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/269050/adebec3ae6027aa41fdd7115070961ee87f0e9eb.jpg" 
+                             alt="Achievement Icon">
+                    </div>
+                    <div class="achievement-content">
+                        <h3 class="achievement-name">Digital Rune</h3>
+                        <p class="achievement-desc">A mysteriously modern rune.</p>
+                    </div>
+                    <div class="achievement-status">
+                        <div class="status-badge locked">
+                            <i class="bi bi-lock-fill"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Achievement 10 -->
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <img src="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/apps/269050/477aba7d4dafea2325a0c1b19e996e53465c5169.jpg" 
+                             alt="Achievement Icon">
+                    </div>
+                    <div class="achievement-content">
+                        <h3 class="achievement-name">Logo Type</h3>
+                        <p class="achievement-desc">A three letter word in the dark. Without it, it's silent.</p>
+                    </div>
+                    <div class="achievement-status">
+                        <div class="status-badge locked">
+                            <i class="bi bi-lock-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>ACHIEVER</h3>
+                    <p>Achievement guides, the right way</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Platform</h4>
+                        <a href="#">Games</a>
+                        <a href="#">Achievements</a>
+                        <a href="#">Guides</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Community</h4>
+                        <a href="#">Discord</a>
+                        <a href="#">Forums</a>
+                        <a href="#">Leaderboards</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Support</h4>
+                        <a href="#">Help Center</a>
+                        <a href="#">Contact</a>
+                        <a href="#">API</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Achiever. All rights reserved.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Twitter"><i class="bi bi-twitter"></i></a>
+                    <a href="#" aria-label="Discord"><i class="bi bi-discord"></i></a>
+                    <a href="#" aria-label="GitHub"><i class="bi bi-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript (you'll create this) -->
+    <script src="js/game.js"></script>
+</body>
+</html>
+
