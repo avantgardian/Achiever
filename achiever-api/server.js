@@ -27,6 +27,28 @@ app.get('/api/games', async (req, res) => {
     res.json(gameList);
 });
 
+app.get('/api/games/:gameId', async (req, res) => {
+    try {
+        const gameId = parseInt(req.params.gameId);
+
+        const game = await prisma.game.findUnique({
+            where: { id: gameId },
+            include: {
+                _count: {
+                    select: {
+                        achievements: true,
+                        guides: true
+                    }
+                }
+            }
+        })
+
+        res.json(game);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch game' });
+    }
+});
+
 app.get('/api/guides', (req, res) => {
     res.send({'message': 'Guides API is running'});
 });
