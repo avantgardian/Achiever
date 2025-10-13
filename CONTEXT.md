@@ -132,7 +132,11 @@ User
 **API Implementation:**
 - ✅ Prisma Client imported into Express (`const { PrismaClient }`)
 - ✅ `/api/games` endpoint working with database queries
+- ✅ `/api/games/:gameId` endpoint for single game with counts
+- ✅ `/api/games/:gameId/achievements` endpoint for game achievements
+- ✅ `/api/achievements/:id` endpoint for single achievement
 - ✅ Published filter implemented (only shows published games)
+- ✅ `_count` aggregation for achievements and guides counts
 - ✅ Tested with real data (Year Walk game)
 - ✅ JSON responses working correctly
 
@@ -159,7 +163,7 @@ User
   - forEach loops for array iteration
   - Efficient DOM manipulation (concatenate then set innerHTML once)
   - Fallback images using `||` operator
-  - Game cards displaying with images, titles, and placeholder stats
+  - Game cards displaying with images, titles, and live stats (achievement & guide counts)
 - ✅ **Dark gamer theme implemented** (commit: 18fc83b)
   - Custom CSS variables for consistent theming
   - Sophisticated gradient backgrounds and animations
@@ -172,8 +176,22 @@ User
 - ✅ **Enhanced HTML structure** (commit: 91fbafa)
   - Improved hero section with search functionality
   - Professional footer with social links
-  - Loading states with Bootstrap spinners
   - Clean semantic HTML structure
+- ✅ **Game Detail Page** (commit: 9ba151d, 249da78, 5b6d787)
+  - Complete game detail page (game.html, game.css, game.js)
+  - Sticky navigation bar with back button
+  - Dynamic game header with title, description, image, and stats
+  - Dynamic achievement grid with all achievements from database
+  - Professional card-based layout matching homepage design
+  - URL parameter handling to get game ID from query string
+  - Full error handling and empty state management
+- ✅ **Unified Skeleton Loaders** (commit: 33b3a5e)
+  - Shimmer animation skeleton loaders on all pages
+  - Homepage: 6 skeleton game cards while loading
+  - Game page: Skeleton header + 6 skeleton achievement cards
+  - Replaced all Bootstrap spinners with consistent skeletons
+  - Professional loading UX throughout app
+  - Clean skeleton removal when data loads
 
 **Testing Infrastructure:**
 - ✅ Playwright testing framework installed and configured
@@ -213,28 +231,27 @@ User
 ### Next Steps 📋
 
 **Frontend Development (Current Focus):**
-1. **Display achievements on frontend**
-   - Create game detail page
-   - Show Year Walk achievements with icons
-   - Achievement cards with descriptions
-   - Link from homepage to game detail page
+1. **Link homepage to game detail page**
+   - Make game cards clickable
+   - Navigate to game.html?id={gameId}
+   - Pass game ID through URL parameters
 
 2. **Implement search functionality**
    - Filter games array as user types
    - Re-render grid with filtered results
    - Connect search input to filtering logic
+   - Handle empty search results
    
-3. **Error handling & empty states**
-   - Show message if API is down
-   - Show message if no games match search
-   - Loading spinner while fetching (already implemented)
-   - Handle network errors gracefully
+3. **Create guides system**
+   - Build guide detail page
+   - Display achievement tree structure
+   - Show guide-specific ordering and hierarchy
 
 **API Development:**
 1. **Build more public endpoints**
-   - GET /api/games/:gameId - Get single game with details
    - GET /api/games/:gameId/guides - Get all guides for a game
    - GET /api/guides/:guideId - Get guide with achievement tree
+   - POST /api/guides - Create new guide (admin)
 
 3. **Install authentication packages**
    - `npm install bcrypt jsonwebtoken`
@@ -265,15 +282,18 @@ User
    - Auto-populate database with Steam data
 
 ### Files Created
-- `achiever-api/server.js` - Express server with Prisma integration and achievement endpoints
+- `achiever-api/server.js` - Express server with Prisma integration and all game/achievement endpoints
 - `achiever-api/seed-year-walk-achievements.js` - Steam API seeding script for achievements
 - `achiever-api/package.json` - Dependencies and scripts
 - `achiever-api/.env` - Environment variables (DATABASE_URL, STEAM_API_KEY) - not in git
 - `achiever-api/prisma/schema.prisma` - Complete database schema (6 models)
 - `achiever-api/prisma/migrations/20251001104326_init/` - Initial migration SQL
-- `achiever-frontend/index.html` - Main frontend HTML with Bootstrap
-- `achiever-frontend/css/style.css` - Custom dark theme styling
-- `achiever-frontend/js/app.js` - Frontend JavaScript with API integration
+- `achiever-frontend/index.html` - Homepage with games grid and skeleton loaders
+- `achiever-frontend/game.html` - Game detail page with achievements
+- `achiever-frontend/css/style.css` - Homepage styles with skeleton animations
+- `achiever-frontend/css/game.css` - Game detail page styles with skeleton animations
+- `achiever-frontend/js/app.js` - Homepage JavaScript with skeleton loader handling
+- `achiever-frontend/js/game.js` - Game detail page JavaScript with URL params and dynamic rendering
 - `playwright.config.ts` - Playwright testing configuration
 - `tests/homepage.spec.ts` - Homepage E2E tests (3 tests, all passing)
 - `package.json` - Root package with Playwright dependencies and test scripts
@@ -285,12 +305,25 @@ User
 - **Database**: Live on Railway PostgreSQL
   - 1 Game (Year Walk) with correct Steam App ID
   - 10 Achievements populated from Steam API
-- **API**: Three working endpoints
-  - GET /api/games - List all games
+- **API**: Four working endpoints
+  - GET /api/games - List all games with counts
+  - GET /api/games/:gameId - Single game with counts
   - GET /api/games/:gameId/achievements - All achievements for a game
   - GET /api/achievements/:id - Single achievement with game data
-- **Frontend**: Professional dark-themed UI with dynamic game cards, tooltips, and responsive design
+- **Frontend**: Two complete pages with professional UX
+  - Homepage: Games grid with skeleton loaders, dynamic stats, tooltips
+  - Game Detail: Full game info + achievements with skeleton loaders
+  - URL parameter handling for navigation
+  - Error handling and empty states throughout
+  - Unified skeleton loader animations
+- **JavaScript Concepts Mastered**:
+  - URL parameters with URLSearchParams
+  - Template literals and dynamic HTML generation
+  - Async/await and fetch API
+  - DOM manipulation and classList operations
+  - Error handling with try/catch
+  - Array methods (forEach, map, filter)
 - **Testing**: Playwright E2E framework with 9 passing tests (3 tests × 3 browsers)
 - **Steam Integration**: API key secured, seeding script ready for more games
-- **Git**: All progress backed up on GitHub (9 commits)
-- **Next**: Display achievements on frontend, implement search functionality
+- **Git**: All progress backed up on GitHub (latest commit: 33b3a5e)
+- **Next**: Link homepage to game detail page, implement search functionality
