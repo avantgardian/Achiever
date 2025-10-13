@@ -302,20 +302,24 @@ User
 - `CONCEPTS.md` - Learning notes and technical concepts
 
 ### Current Status 🎯
-- **Database**: Live on Railway PostgreSQL
+- **Database**: Live on Railway PostgreSQL (cloud)
   - 1 Game (Year Walk) with correct Steam App ID
   - 10 Achievements populated from Steam API
-- **API**: Four working endpoints
+- **API**: Four working endpoints - DEPLOYED on Railway ✅
   - GET /api/games - List all games with counts
   - GET /api/games/:gameId - Single game with counts
   - GET /api/games/:gameId/achievements - All achievements for a game
   - GET /api/achievements/:id - Single achievement with game data
-- **Frontend**: Two complete pages with professional UX
+  - Live at: https://achiever-production.up.railway.app
+- **Frontend**: DEPLOYED on GitHub Pages ✅
+  - Two complete pages with professional UX
   - Homepage: Games grid with skeleton loaders, dynamic stats, tooltips
   - Game Detail: Full game info + achievements with skeleton loaders
   - URL parameter handling for navigation
   - Error handling and empty states throughout
   - Unified skeleton loader animations
+  - Environment-aware API configuration (localhost vs production)
+  - Clickable navigation between pages
 - **JavaScript Concepts Mastered**:
   - URL parameters with URLSearchParams
   - Template literals and dynamic HTML generation
@@ -323,7 +327,14 @@ User
   - DOM manipulation and classList operations
   - Error handling with try/catch
   - Array methods (forEach, map, filter)
+  - Environment detection and configuration
 - **Testing**: Playwright E2E framework with 9 passing tests (3 tests × 3 browsers)
+  - TESTING.md guide created with prioritized test plan
+- **Deployment**: FULLY LIVE ✅
+  - Frontend: GitHub Pages (free static hosting)
+  - Backend: Railway (cloud hosting)
+  - Database: Railway PostgreSQL (cloud database)
+  - Automatic environment detection
 - **Steam Integration**: API key secured, seeding script ready for more games
-- **Git**: All progress backed up on GitHub (latest commit: 33b3a5e)
-- **Next**: Link homepage to game detail page, implement search functionality
+- **Git**: All progress backed up on GitHub (latest commit: 392f5d3)
+- **Next**: Playwright testing, implement search functionality
