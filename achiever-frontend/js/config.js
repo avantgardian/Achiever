@@ -3,7 +3,7 @@
 
 const API_URL = window.location.hostname === 'localhost' 
     ? 'http://localhost:3000'  // Local development
-    : 'https://YOUR-RAILWAY-APP.up.railway.app';  // TODO: Replace with your Railway URL
+    : 'https://achiever-production.up.railway.app';  // Production backend
 
 // Export for use in other files
 window.API_URL = API_URL;
