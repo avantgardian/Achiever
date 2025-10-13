@@ -49,7 +49,7 @@ function initializeTooltips() {
 }
 
 async function fetchGames() {
-    const response = await fetch('http://localhost:3000/api/games');
+    const response = await fetch(`${window.API_URL}/api/games`);
     const games = await response.json();
     console.log('Fetched Games: ', games);
     renderGames(games);

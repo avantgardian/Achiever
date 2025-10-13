@@ -5,7 +5,7 @@ async function fetchGameData() {
         const urlParams = new URLSearchParams(window.location.search);
         const gameId = urlParams.get('id');
 
-        const response = await fetch(`http://localhost:3000/api/games/${gameId}`);
+        const response = await fetch(`${window.API_URL}/api/games/${gameId}`);
         const game = await response.json();
 
         const achievements = await fetchAchievements(gameId);
@@ -19,7 +19,7 @@ async function fetchGameData() {
 }
 
 async function fetchAchievements(gameId) {
-    const response = await fetch(`http://localhost:3000/api/games/${gameId}/achievements`);
+    const response = await fetch(`${window.API_URL}/api/games/${gameId}/achievements`);
 
     return await response.json();
 }
