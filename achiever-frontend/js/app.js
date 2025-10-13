@@ -9,7 +9,7 @@ function renderGames(games) {
 
     games.forEach(game => {
         const cardHTML = `
-            <div class="col">
+            <div class="col" onclick="window.location.href='game.html?id=${game.id}'">
                 <div class="card h-100 game-card">
                     <img src="${game.imageUrl || 'https://via.placeholder.com/300x200'}" 
                         class="card-img-top" 
