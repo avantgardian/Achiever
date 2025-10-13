@@ -9,6 +9,7 @@ async function fetchGameData() {
         const game = await response.json();
 
         const achievements = await fetchAchievements(gameId);
+        renderGameHeader(game);
         renderAchievements(achievements);
     } catch (error) {
         console.error('Error loading game:', error);
@@ -21,6 +22,23 @@ async function fetchAchievements(gameId) {
     const response = await fetch(`http://localhost:3000/api/games/${gameId}/achievements`);
 
     return await response.json();
+}
+
+function renderGameHeader(game) {
+    // Title & Description
+    document.querySelector('.game-title').textContent = game.name;
+    document.querySelector('.game-description').textContent = game.description;
+
+    // Image
+    const image = document.querySelector('.game-image');
+    image.src = game.imageUrl;
+    image.alt = game.name;
+
+    // Stats
+    const statValues = document.querySelectorAll('.stat-value');
+    statValues[0].textContent = game._count.achievements; // First stat
+    statValues[1].textContent = game._count.guides;       // Second stat
+    statValues[2].textContent = new Date(game.releaseDate).getFullYear(); // Third stat
 }
 
 function renderAchievements(achievements) {
