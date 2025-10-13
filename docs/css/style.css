@@ -615,30 +615,6 @@ body {
    ANIMATIONS & UTILITIES
    ======================================== */
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.games-grid > .col {
-    animation: fadeIn 0.6s ease-out forwards;
-}
-
-.games-grid > .col:nth-child(1) { animation-delay: 0.05s; }
-.games-grid > .col:nth-child(2) { animation-delay: 0.1s; }
-.games-grid > .col:nth-child(3) { animation-delay: 0.15s; }
-.games-grid > .col:nth-child(4) { animation-delay: 0.2s; }
-.games-grid > .col:nth-child(5) { animation-delay: 0.25s; }
-.games-grid > .col:nth-child(6) { animation-delay: 0.3s; }
-.games-grid > .col:nth-child(7) { animation-delay: 0.35s; }
-.games-grid > .col:nth-child(8) { animation-delay: 0.4s; }
-
 /* Scrollbar styling */
 ::-webkit-scrollbar {
     width: 12px;
