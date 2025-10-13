@@ -1,16 +1,20 @@
 // Game Detail Page JavaScript
 
 async function fetchGameData() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const gameId = urlParams.get('id');
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameId = urlParams.get('id');
 
-    const response = await fetch(`http://localhost:3000/api/games/${gameId}`);
-    const game = await response.json();
-    console.log('Fetched game:', game);
+        const response = await fetch(`http://localhost:3000/api/games/${gameId}`);
+        const game = await response.json();
 
-    const achievements = await fetchAchievements(gameId);
-    renderAchievements(achievements);
-    console.log('Fetched achievements:', achievements);
+        const achievements = await fetchAchievements(gameId);
+        renderAchievements(achievements);
+    } catch (error) {
+        console.error('Error loading game:', error);
+        const grid = document.getElementById('achievementsGrid');
+        grid.innerHTML = '<p class="text-center loading-text">Failed to load achievements. Please try again.</p>';
+    }
 }
 
 async function fetchAchievements(gameId) {
@@ -20,8 +24,13 @@ async function fetchAchievements(gameId) {
 }
 
 function renderAchievements(achievements) {
-    const achievementsGrid = document.querySelector('.achievements-grid');
-    achievementsGrid.innerHTML = '';
+    const achievementsGrid = document.getElementById('achievementsGrid');
+    achievementsGrid.innerHTML = ''; // Clears the loading spinner
+
+    if (!achievements || achievements.length === 0) {
+        achievementsGrid.innerHTML = '<p class="text-center loading-text">No achievements found.</p>';
+        return;
+    }
     
     let allAchievementCards = '';
 
