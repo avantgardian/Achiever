@@ -47,6 +47,7 @@ Thumbs.db
 
 # Planning & draft files (keep local)
 CONCEPTS.md
+TESTING.md
 
 # Playwright
 /test-results/
