@@ -26,24 +26,38 @@ async function fetchAchievements(gameId) {
 
 function renderGameHeader(game) {
     // Title & Description
-    document.querySelector('.game-title').textContent = game.name;
-    document.querySelector('.game-description').textContent = game.description;
+    const title = document.querySelector('.game-title');
+    title.textContent = game.name;
+    title.classList.remove('skeleton-text');
+    
+    const description = document.querySelector('.game-description');
+    description.textContent = game.description;
+    description.classList.remove('skeleton-text');
 
     // Image
     const image = document.querySelector('.game-image');
     image.src = game.imageUrl;
     image.alt = game.name;
+    image.classList.remove('skeleton-image');
 
     // Stats
     const statValues = document.querySelectorAll('.stat-value');
-    statValues[0].textContent = game._count.achievements; // First stat
-    statValues[1].textContent = game._count.guides;       // Second stat
-    statValues[2].textContent = new Date(game.releaseDate).getFullYear(); // Third stat
+    statValues[0].textContent = game._count.achievements;
+    statValues[0].classList.remove('skeleton');
+    
+    statValues[1].textContent = game._count.guides;
+    statValues[1].classList.remove('skeleton');
+    
+    statValues[2].textContent = new Date(game.releaseDate).getFullYear();
+    statValues[2].classList.remove('skeleton');
 }
 
 function renderAchievements(achievements) {
     const achievementsGrid = document.getElementById('achievementsGrid');
-    achievementsGrid.innerHTML = ''; // Clears the loading spinner
+    
+    // Remove all skeleton cards
+    const skeletonCards = document.querySelectorAll('.skeleton-card');
+    skeletonCards.forEach(card => card.remove());
 
     if (!achievements || achievements.length === 0) {
         achievementsGrid.innerHTML = '<p class="text-center loading-text">No achievements found.</p>';
@@ -72,7 +86,7 @@ function renderAchievements(achievements) {
         `;
         allAchievementCards += cardHTML;
     });
-    achievementsGrid.innerHTML = allAchievementCards;
+    achievementsGrid.innerHTML += allAchievementCards;
 }
 
 document.addEventListener('DOMContentLoaded', () => {

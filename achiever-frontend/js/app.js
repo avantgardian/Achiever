@@ -1,6 +1,9 @@
 function renderGames(games) {
     const gamesGrid = document.getElementById('gamesGrid');
-    gamesGrid.innerHTML = '';
+    
+    // Remove all skeleton cards
+    const skeletonCards = document.querySelectorAll('.skeleton-card');
+    skeletonCards.forEach(card => card.remove());
     
     let allGameCards = '';
 
@@ -31,7 +34,7 @@ function renderGames(games) {
         allGameCards += cardHTML;
     });
 
-    gamesGrid.innerHTML = allGameCards;
+    gamesGrid.innerHTML += allGameCards;
 
     // Initialize tooltips for the newly rendered cards
     initializeTooltips();
