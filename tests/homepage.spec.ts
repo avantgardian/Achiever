@@ -15,5 +15,6 @@ test('has searchbar', async ({ page }) => {
 test('displays at least one game card', async ({ page }) => {
     await page.goto('/');
 
+    await expect(page.locator('.skeleton-card')).toHaveCount(0);
     await expect(page.locator('.game-card').first()).toBeVisible();
 });
