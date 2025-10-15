@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "backend": "cd achiever-api && npm run dev",
-    "frontend": "http-server achiever-frontend -p 8080 -c-1",
+    "frontend": "http-server docs -p 8080 -c-1",
     "test": "npx playwright test",
     "test:ui": "npx playwright test --ui",
     "test:headed": "npx playwright test --headed"
