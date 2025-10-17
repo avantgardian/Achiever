@@ -51,6 +51,7 @@ Thumbs.db
 .DS_Store
 
 # Planning & draft files (keep local)
+CONTEXT.md
 CONCEPTS.md
 TESTING.md
 PRIORITIES.md

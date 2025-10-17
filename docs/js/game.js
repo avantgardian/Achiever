@@ -1,4 +1,5 @@
 // Game Detail Page JavaScript
+import { calculateProgress } from "./helpers.js";
 
 async function fetchGameData() {
     try {
@@ -11,6 +12,7 @@ async function fetchGameData() {
         const achievements = await fetchAchievements(gameId);
         renderGameHeader(game);
         renderAchievements(achievements);
+        updateProgressBar(achievements);
     } catch (error) {
         console.error('Error loading game:', error);
         const grid = document.getElementById('achievementsGrid');
@@ -87,6 +89,20 @@ function renderAchievements(achievements) {
         allAchievementCards += cardHTML;
     });
     achievementsGrid.innerHTML += allAchievementCards;
+}
+
+function updateProgressBar(achievements) {
+    const total = achievements.length;
+
+    // For now, no user logged in, so completed = 0
+    const completed = 0;
+    
+    // Use YOUR function!
+    const percentage = calculateProgress(completed, total);
+    
+    document.querySelector('.progress-text').textContent = `${completed} / ${total} Unlocked`;
+    const progressBar = document.querySelector('.progress-bar-fill');
+    progressBar.style.width = percentage +'%';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
