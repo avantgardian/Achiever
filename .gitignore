@@ -36,6 +36,11 @@ logs/
 coverage/
 .nyc_output/
 
+# Vitest
+.vitest/
+coverage-report/
+html-report/
+
 # Temporary files
 tmp/
 temp/
@@ -50,7 +55,7 @@ CONCEPTS.md
 TESTING.md
 PRIORITIES.md
 
-# Playwright
+# Playwright (E2E tests)
 /test-results/
 /playwright-report/
 /blob-report/

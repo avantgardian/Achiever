@@ -12,8 +12,10 @@
 - PostgreSQL (via Railway)
 
 *Testing:*
-- Playwright (End-to-end testing)
-- http-server (Local frontend serving for tests)
+- **Vitest** (Unit testing - fast, isolated function tests)
+- **Playwright** (E2E testing - full browser/user flow tests)
+- http-server (Local frontend serving for E2E tests)
+- Two-tier testing strategy: Unit tests for logic, E2E tests for user flows
 
 ## Frontend Structure
 *Public Features:*
@@ -194,25 +196,31 @@ User
   - Clean skeleton removal when data loads
 
 **Testing Infrastructure:**
-- ✅ Playwright testing framework installed and configured
-- ✅ http-server installed for serving frontend during tests
-- ✅ playwright.config.ts configured with:
-  - baseURL set to `http://localhost:8080` (frontend)
-  - webServer array to auto-start both backend (port 3000) and frontend (port 8080)
-  - Tests configured for Chromium, Firefox, and WebKit browsers
-  - Trace collection on test failures for debugging
-- ✅ Root package.json scripts added:
-  - `npm test` - Run all tests (auto-starts servers)
-  - `npm run test:ui` - Run tests with interactive UI
-  - `npm run test:headed` - Run tests with visible browser
+- ✅ **Two-tier testing architecture** (Unit + E2E)
+- ✅ **Vitest** for unit testing:
+  - Fast, isolated function tests
+  - Located in `tests/unit/`
+  - vitest.config.js configured
+  - Scripts: `npm run test:unit`, `npm run test:unit:watch`, `npm run test:unit:ui`
+- ✅ **Playwright** for E2E testing:
+  - Full browser integration tests
+  - Located in `tests/e2e/`
+  - playwright.config.ts configured with:
+    - baseURL set to `http://localhost:8080` (frontend)
+    - webServer array to auto-start both backend (port 3000) and frontend (port 8080)
+    - Tests configured for Chromium, Firefox, and WebKit browsers
+    - Trace collection on test failures for debugging
+  - Scripts: `npm run test:e2e`, `npm run test:e2e:ui`, `npm run test:e2e:headed`
+- ✅ Root package.json scripts:
+  - `npm test` - Run ALL tests (unit THEN E2E)
   - `npm run backend` - Manually start backend API
   - `npm run frontend` - Manually start frontend server
-- ✅ Homepage tests created and passing:
-  - tests/homepage.spec.ts with 3 tests
-  - Page loads successfully (title check)
-  - Search bar is visible
-  - Game cards render from API
-  - All 9 tests passing (3 tests × 3 browsers)
+- ✅ **E2E Tests** created and passing (10 tests, 30 total across 3 browsers):
+  - tests/e2e/homepage.spec.ts - Homepage functionality
+  - tests/e2e/game-detail.spec.ts - Game detail page
+  - tests/e2e/navigation.spec.ts - Navigation flows
+  - tests/e2e/skeleton-loaders.spec.ts - Loading states
+- ✅ **Ready for TDD workflow**: Write tests first, then implement features
 
 **Steam API Integration & Achievements:**
 - ✅ Steam Web API key secured in .env file
@@ -294,9 +302,12 @@ User
 - `achiever-frontend/css/game.css` - Game detail page styles with skeleton animations
 - `achiever-frontend/js/app.js` - Homepage JavaScript with skeleton loader handling
 - `achiever-frontend/js/game.js` - Game detail page JavaScript with URL params and dynamic rendering
-- `playwright.config.ts` - Playwright testing configuration
-- `tests/homepage.spec.ts` - Homepage E2E tests (3 tests, all passing)
-- `package.json` - Root package with Playwright dependencies and test scripts
+- `playwright.config.ts` - Playwright E2E testing configuration
+- `vitest.config.js` - Vitest unit testing configuration
+- `tests/e2e/*.spec.ts` - E2E tests (homepage, game-detail, navigation, skeleton-loaders)
+- `tests/unit/*.test.js` - Unit tests for helper functions (to be written with TDD)
+- `tests/README.md` - Testing guide and structure documentation
+- `package.json` - Root package with Vitest + Playwright dependencies and test scripts
 - `.gitignore` - Comprehensive ignore rules for monorepo
 - `CONTEXT.md` - Project documentation (this file)
 - `CONCEPTS.md` - Learning notes and technical concepts
@@ -328,8 +339,12 @@ User
   - Error handling with try/catch
   - Array methods (forEach, map, filter)
   - Environment detection and configuration
-- **Testing**: Playwright E2E framework with 9 passing tests (3 tests × 3 browsers)
-  - TESTING.md guide created with prioritized test plan
+- **Testing**: Two-tier testing architecture ✅
+  - **Unit Tests**: Vitest framework installed and configured (tests/unit/)
+  - **E2E Tests**: Playwright with 10 tests passing (30 total across 3 browsers in tests/e2e/)
+  - **TDD Ready**: Test-first development workflow enabled
+  - TESTING.md guide with TDD workflow and test plans
+  - tests/README.md with testing structure documentation
 - **Deployment**: FULLY LIVE ✅
   - Frontend: GitHub Pages (free static hosting)
   - Backend: Railway (cloud hosting)
