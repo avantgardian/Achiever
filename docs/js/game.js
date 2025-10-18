@@ -50,7 +50,10 @@ function renderGameHeader(game) {
     statValues[1].textContent = game._count.guides;
     statValues[1].classList.remove('skeleton');
     
-    statValues[2].textContent = new Date(game.releaseDate).getFullYear();
+    // Handle null release date
+    statValues[2].textContent = game.releaseDate 
+        ? new Date(game.releaseDate).getFullYear() 
+        : 'TBA';
     statValues[2].classList.remove('skeleton');
 }
 

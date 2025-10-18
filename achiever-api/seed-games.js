@@ -31,12 +31,19 @@ async function seedGames() {
 
         const gameInfo = storeData[item.steamAppId].data;
 
+        // Parse release date if available
+        let releaseDate = null;
+        if (gameInfo.release_date && !gameInfo.release_date.coming_soon && gameInfo.release_date.date) {
+            releaseDate = new Date(gameInfo.release_date.date);
+        }
+
         const newGame = await prisma.game.create({
             data: {
                 name: gameInfo.name,
                 description: gameInfo.short_description,
                 imageUrl: gameInfo.header_image,
                 steamAppId: gameInfo.steam_appid,
+                releaseDate: releaseDate,
                 published: true
             }
         });
