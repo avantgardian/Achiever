@@ -5,7 +5,10 @@ const prisma = new PrismaClient();
 
 const GAMES_TO_SEED = [
     { name: 'Snowrunner', steamAppId: 1465360 },
-    { name: 'RoadCraft', steamAppId: 2104890 }
+    { name: 'RoadCraft', steamAppId: 2104890 },
+    { name: 'Car Mechanic Simulator 21', steamAppId: 1190000 },
+    { name: 'Deconstructor Simulator', steamAppId: 2487150 },
+    { name: 'Ship Graveyard Simulator 2', steamAppId: 2201940 }
 ]
 
 async function seedGames() {

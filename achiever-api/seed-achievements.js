@@ -7,7 +7,10 @@ const prisma = new PrismaClient();
 const GAMES_TO_SEED = [
     269050,   // Year Walk
     1465360,  // SnowRunner
-    2104890   // RoadCraft
+    2104890,  // RoadCraft
+    1190000,  // Car Mechanic Simulator 21
+    2487150,  // Deconstructor Simulator
+    2201940  // Ship Graveyard Simulator 2
 ];
 
 async function seedAchievements() {

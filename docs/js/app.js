@@ -1,10 +1,21 @@
+let allGames = [];
+
 function renderGames(games) {
     const gamesGrid = document.getElementById('gamesGrid');
-    
-    // Remove all skeleton cards
-    const skeletonCards = document.querySelectorAll('.skeleton-card');
-    skeletonCards.forEach(card => card.remove());
-    
+
+    gamesGrid.innerHTML = '';
+
+    if (games.length === 0) {
+        gamesGrid.innerHTML = `
+            <div class="empty-state">
+                <i class="bi bi-search"></i>
+                <h3>No games found</h3>
+                <p>Try a different search term</p>
+            </div>
+        `;
+        return;
+    }
+
     let allGameCards = '';
 
     games.forEach(game => {
@@ -34,7 +45,7 @@ function renderGames(games) {
         allGameCards += cardHTML;
     });
 
-    gamesGrid.innerHTML += allGameCards;
+    gamesGrid.innerHTML = allGameCards;
 
     // Initialize tooltips for the newly rendered cards
     initializeTooltips();
@@ -48,9 +59,19 @@ function initializeTooltips() {
     });
 }
 
+function filterGames(searchQuery) {
+    if (!searchQuery) {
+        return allGames;
+    }
+    const query = searchQuery.toLowerCase();
+
+    return allGames.filter(game => game.name.toLowerCase().includes(query));
+}
+
 async function fetchGames() {
     const response = await fetch(`${window.API_URL}/api/games`);
     const games = await response.json();
+    allGames = games; // will use this for the search functionality
     console.log('Fetched Games: ', games);
     renderGames(games);
 }
@@ -58,4 +79,9 @@ async function fetchGames() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('We loaded in this!');
     fetchGames();
+    
+    const searchInput = document.getElementById('gameSearch');
+    searchInput.addEventListener('input', (event) => {
+        renderGames(filterGames(event.target.value));
+    });
 })
