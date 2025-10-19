@@ -1,4 +1,5 @@
 let allGames = [];
+let searchTimeout; // timer ID
 
 function renderGames(games) {
     const gamesGrid = document.getElementById('gamesGrid');
@@ -82,6 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const searchInput = document.getElementById('gameSearch');
     searchInput.addEventListener('input', (event) => {
-        renderGames(filterGames(event.target.value));
+        clearTimeout(searchTimeout);
+
+        searchTimeout = setTimeout(() => {
+            renderGames(filterGames(event.target.value));
+        }, 300);
     });
 })
