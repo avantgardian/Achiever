@@ -56,11 +56,9 @@ jobs:
       - name: Setup test database
         run: cd achiever-api && npx prisma migrate deploy
 
-      # Step 6: Seed test database
+      # Step 6: Seed test database with hardcoded test data
       - name: Seed test database
-        run: cd achiever-api && node seed-games.js
-        env:
-          STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
+        run: cd achiever-api && node seed-test-data.js
 
       # Step 7: Run linter
       - name: Run ESLint
