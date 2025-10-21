@@ -27,6 +27,9 @@ async function fetchAchievements(gameId) {
 }
 
 function renderGameHeader(game) {
+    // Page Title
+    document.title = game.name + ' - Achiever';
+
     // Title & Description
     const title = document.querySelector('.game-title');
     title.textContent = game.name;
