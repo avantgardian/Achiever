@@ -23,6 +23,54 @@ const TEST_GAMES = [
         description: 'Start Year Walk',
         steamAchievementId: 'YEAR_WALK_START',
         iconUrl: 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/269050/achievement_02.jpg'
+      },
+      {
+        name: 'The Night Walk',
+        description: 'Walk through the night',
+        steamAchievementId: 'NIGHT_WALK',
+        iconUrl: 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/269050/achievement_03.jpg'
+      },
+      {
+        name: 'The Forest',
+        description: 'Enter the dark forest',
+        steamAchievementId: 'ENTER_FOREST',
+        iconUrl: 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/269050/achievement_04.jpg'
+      },
+      {
+        name: 'The Stream',
+        description: 'Cross the frozen stream',
+        steamAchievementId: 'CROSS_STREAM',
+        iconUrl: 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/269050/achievement_05.jpg'
+      },
+      {
+        name: 'The Church',
+        description: 'Find the old church',
+        steamAchievementId: 'FIND_CHURCH',
+        iconUrl: 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/269050/achievement_06.jpg'
+      },
+      {
+        name: 'The Mill',
+        description: 'Discover the abandoned mill',
+        steamAchievementId: 'FIND_MILL',
+        iconUrl: 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/269050/achievement_07.jpg'
+      },
+      {
+        name: 'The Vision',
+        description: 'Experience the vision',
+        steamAchievementId: 'SEE_VISION',
+        iconUrl: 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/269050/achievement_08.jpg'
+      },
+      {
+        name: 'The Mystery',
+        description: 'Uncover the mystery',
+        steamAchievementId: 'SOLVE_MYSTERY',
+        iconUrl: 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/269050/achievement_09.jpg'
+      },
+      {
+        name: 'The Truth',
+        description: 'Learn the truth',
+        steamAchievementId: 'LEARN_TRUTH',
+        iconUrl: 'https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/269050/achievement_10.jpg'
       }
     ]
   },
