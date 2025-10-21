@@ -47,10 +47,11 @@ export default defineConfig({
       use: { ...devices['Desktop Firefox'] },
     },
 
-    {
+    // Only test WebKit locally (slow on Linux CI)
+    ...(!process.env.CI ? [{
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
-    },
+    }] : []),
 
     /* Test against mobile viewports. */
     // {
