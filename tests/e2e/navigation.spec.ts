@@ -1,16 +1,19 @@
 import { test, expect } from '@playwright/test';
 
-test('clicking game card navigates to game detail page', async ({ page }) => {
-    await page.goto('/');
+test.describe('Page Navigation', () => {
 
-    await expect(page.locator('.skeleton-card')).toHaveCount(0);
-    await page.locator('.game-card').first().click();
-    await expect(page).toHaveURL(/game\.html\?id=/);
-});
+    test('clicking game card navigates to game detail page', async ({ page }) => {
+        await page.goto('/');
 
-test('back button returns to homepage', async ({ page }) => {
-    await page.goto('/game.html?id=1');
+        await expect(page.locator('.skeleton-card')).toHaveCount(0);
+        await page.locator('.game-card').first().click();
+        await expect(page).toHaveURL(/game\.html\?id=/);
+    });
 
-    await page.locator('.nav-back').click();
-    await expect(page).toHaveURL(/index\.html/);
+    test('back button returns to homepage', async ({ page }) => {
+        await page.goto('/game.html?id=1');
+
+        await page.locator('.nav-back').click();
+        await expect(page).toHaveURL(/index\.html/);
+    });
 });
