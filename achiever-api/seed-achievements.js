@@ -10,7 +10,8 @@ const GAMES_TO_SEED = [
     2104890,  // RoadCraft
     1190000,  // Car Mechanic Simulator 21
     2487150,  // Deconstructor Simulator
-    2201940  // Ship Graveyard Simulator 2
+    2201940,  // Ship Graveyard Simulator 2
+    2321470  // Deep Rock Galactic Survivors
 ];
 
 async function seedAchievements() {
