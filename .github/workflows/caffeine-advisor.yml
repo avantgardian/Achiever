@@ -61,8 +61,6 @@ jobs:
 
           function getCodeMetrics() {
             try {
-              console.error('DEBUG: Getting code metrics with JavaScript parsing...');
-              
               // Parse git numstat output in JavaScript instead of awk
               function calculateLOC(gitLogOutput) {
                 let totalLOC = 0;
@@ -74,7 +72,6 @@ jobs:
                   if (parts.length >= 2) {
                     const additions = parseInt(parts[0]) || 0;
                     const deletions = parseInt(parts[1]) || 0;
-                    // Count net changes (additions - deletions)
                     totalLOC += Math.abs(additions - deletions);
                   }
                 }
@@ -93,7 +90,6 @@ jobs:
               
               // Fallback: if no 24h data, use last 20 commits
               if (locToday === 0) {
-                console.error('DEBUG: No commits in 24h window, using recent commits...');
                 try {
                   raw24h = execSync(`git log -20 --numstat --pretty=""`, { encoding: 'utf-8' }).toString();
                   locToday = calculateLOC(raw24h);
@@ -101,8 +97,6 @@ jobs:
                   locToday = 0;
                 }
               }
-              
-              console.error('DEBUG: Calculated locToday:', locToday);
               
               // Get commits from last 7 days
               let raw7d = '';
@@ -116,7 +110,6 @@ jobs:
               
               // Fallback: if no 7d data, use all commits
               if (locWeek === 0) {
-                console.error('DEBUG: No commits in 7d window, using all commits...');
                 try {
                   raw7d = execSync(`git log --numstat --pretty=""`, { encoding: 'utf-8' }).toString();
                   locWeek = calculateLOC(raw7d);
@@ -125,24 +118,12 @@ jobs:
                 }
               }
               
-              console.error('DEBUG: Calculated locWeek:', locWeek);
-              
               return {
                 locToday: isNaN(locToday) || locToday < 0 ? 0 : locToday,
                 locWeek: isNaN(locWeek) || locWeek < 0 ? 0 : locWeek
               };
             } catch (e) {
-              console.error('DEBUG: Error getting code metrics:', e.message);
               return { locToday: 0, locWeek: 0 };
-            }
-          }
-
-          function getTestCoverage() {
-            try {
-              // Rough estimate - check if coverage file exists
-              return 75; // Default
-            } catch (e) {
-              return 50;
             }
           }
 
@@ -267,65 +248,15 @@ jobs:
           }
 
           // ============================================
-          // STEP 6: HEALTH & SAFETY WARNINGS
-          // ============================================
-
-          function getHealthWarning(caffeineMg) {
-            if (caffeineMg < 50) {
-              return "✅ SAFE - No concerns. Normal caffeine intake.";
-            } else if (caffeineMg < 200) {
-              return "🟡 MODERATE - Keep an eye on this. Don't overdo it.";
-            } else if (caffeineMg < 400) {
-              return "🟠 ELEVATED - Getting close to max daily recommendation (400mg).";
-            } else if (caffeineMg < 600) {
-              return "🔴 HIGH - Exceeding recommended daily intake. You might experience jitters.";
-            } else {
-              return "💀 DANGER - EXTREME caffeine intake. This is NOT recommended. SLEEP instead.";
-            }
-          }
-
-          function getEnergySuggestion(energy) {
-            if (energy < 20) {
-              return "🚨 CRITICAL: You need REST more than caffeine. Go to bed NOW.";
-            } else if (energy < 40) {
-              return "😴 VERY LOW: Consider a 20-minute nap before the caffeine.";
-            } else if (energy < 60) {
-              return "😑 LOW: Caffeine + walk + water will help.";
-            } else if (energy < 80) {
-              return "✅ GOOD: Light caffeine should keep you productive.";
-            } else {
-              return "🔥 SUPERCHARGED: You might not even need caffeine! Stay hydrated.";
-            }
-          }
-
-          function getBurnoutStatus(commits7d) {
-            const avgPerDay = commits7d / 7;
-            
-            if (commits7d < 20) {
-              return "🟢 HEALTHY - Nice work-life balance.";
-            } else if (commits7d < 40) {
-              return "🟡 GOOD - Solid pace, sustainable.";
-            } else if (commits7d < 70) {
-              return "🟠 ELEVATED - You're working hard. Watch for burnout.";
-            } else {
-              return "🔴 BURNOUT RISK - You're pushing too hard. Slow down!";
-            }
-          }
-
-          // ============================================
           // MAIN CALCULATION
           // ============================================
 
           const commits = getCommitMetrics();
           const code = getCodeMetrics();
-          const coverage = getTestCoverage();
 
           const energy = calculateEnergyLevel(commits.commits24h, code.locToday);
           const caffeine = calculateCaffeinNeeds(energy, commits.commits24h, code.locToday, commits.commits7d);
           const recommendations = getRecommendations(caffeine.totalCaffeine);
-          const warning = getHealthWarning(caffeine.totalCaffeine);
-          const energySuggestion = getEnergySuggestion(energy);
-          const burnoutStatus = getBurnoutStatus(commits.commits7d);
 
           // ============================================
           // OUTPUT RESULTS
@@ -351,12 +282,7 @@ jobs:
               serving: r.serving,
               emoji: r.emoji,
               cost: r.cost
-            })),
-            warnings: {
-              healthStatus: warning,
-              energyLevel: energySuggestion,
-              burnoutStatus: burnoutStatus
-            }
+            }))
           }, null, 2));
 
           EOF
@@ -375,102 +301,59 @@ jobs:
           const data = JSON.parse(fs.readFileSync('caffeine-report.json', 'utf8'));
 
           // Build markdown report
-          let markdown = `# ☕ Advanced Caffeine Prescription Report
+          let markdown = `# ☕ Caffeine Prescription Report
 
-          ## 📊 Energy Analysis
+## 📊 Energy Status
 
-          **Current Energy Level:** \`${data.energy}/100\`
+**Energy Level:** ${data.energy}/100
+${data.energy >= 80 ? '🔥 EXCELLENT - You are thriving!' : 
+  data.energy >= 60 ? '🟢 GOOD - Stable' : 
+  data.energy >= 40 ? '🟡 LOW - Needs attention' : 
+  '🔴 CRITICAL - You need REST'}
 
-          ${data.energy >= 80 ? '🔥' : data.energy >= 60 ? '🟢' : data.energy >= 40 ? '🟡' : '🔴'} **Status:** 
-          ${data.energy < 30 ? 'CRITICAL - You are running on empty' : 
-            data.energy < 50 ? 'LOW - Needs attention' : 
-            data.energy < 70 ? 'MODERATE - Getting tired' :
-            data.energy < 85 ? 'GOOD - Stable' : 'EXCELLENT - You are thriving'}
+---
 
-          ## 🚦 Development Metrics (Last 24 Hours)
+## 📈 Development Activity (Last 24h / Last 7d)
 
-          | Metric | Value |
-          |--------|-------|
-          | **Commits** | ${data.commits24h} |
-          | **Lines Changed** | ${data.locToday} |
-          | **Energy Level** | ${data.energy}/100 |
-          | **Avg Lines/Commit** | ${data.locToday > 0 ? Math.round(data.locToday / Math.max(data.commits24h, 1)) : 0} |
+| Metric | 24h | 7d |
+|--------|-----|-----|
+| **Commits** | ${data.commits24h} | ${data.commits7d} |
+| **Lines Changed** | ${data.locToday} | ${data.locWeek} |
+| **Avg Lines/Commit** | ${data.locToday > 0 ? Math.round(data.locToday / Math.max(data.commits24h, 1)) : 0} | ${data.locWeek > 0 ? Math.round(data.locWeek / Math.max(data.commits7d, 1)) : 0} |
 
-          ## 📈 Weekly Activity
+---
 
-          | Metric | Value |
-          |--------|-------|
-          | **7-Day Commits** | ${data.commits7d} |
-          | **30-Day Commits** | ${data.commits30d} |
-          | **Avg Commits/Day (7d)** | ${Math.round(data.commits7d / 7)} |
-          | **Lines Added (Week)** | ${data.locWeek} |
+## ☕ Caffeine Prescription
 
-          ## ☕ Caffeine Prescription
+**Recommended:** ${data.caffeineMg}mg total
+- Base need: ${data.caffeineMgBreakdown.base}mg
+- From code output: +${data.caffeineMgBreakdown.locBonus}mg
+- Burnout risk: +${data.caffeineMgBreakdown.burnoutRisk}mg
 
-          **Total Recommended Caffeine:** \`${data.caffeineMg}mg\`
+### 💊 Product Recommendation${data.recommendations.length === 1 ? '' : 's'}
 
-          ### Breakdown:
-          - **Base Metabolic Need:** ${data.caffeineMgBreakdown.base}mg
-          - **Code Output Bonus:** +${data.caffeineMgBreakdown.locBonus}mg
-          - **Burnout Risk Factor:** +${data.caffeineMgBreakdown.burnoutRisk}mg
+${data.recommendations.length === 0 ? '**No caffeine needed!** Go drink water and take a walk.' : 
+  data.recommendations.map((r, i) => `
+**Option ${i + 1}:** ${r.emoji} ${r.product.replace(/_/g, ' ').toUpperCase()}
+- ${r.servings} × ${r.serving}
+- ${r.totalMg}mg caffeine | ${r.cost}`).join('\n\n')}
 
-          ---
+---
 
-          ## 💊 Product Recommendations
+${data.energy < 30 ? 
+  '### 🚨 YOU NEED SLEEP\nSeriously, caffeine won\'t help. Get 8 hours of rest.' :
+  data.energy < 50 ?
+  '### 😴 Take a Nap First\nConsider a 20-minute nap before the caffeine.' :
+  data.energy < 70 ?
+  '### ✅ Moderate Boost\nCaffeine + walk + water will keep you productive.' :
+  '### 🔥 Already Strong\nLight caffeine optional. Stay hydrated.'}
 
-          ${data.recommendations.length === 0 ? '**No caffeine needed!** Go drink some water and take a walk.' : 
-            data.recommendations.map((r, i) => `
-          ### Option ${i + 1}: ${r.emoji} ${r.product.replace(/_/g, ' ').toUpperCase()}
-          - **Amount:** ${r.servings} × ${r.serving}
-          - **Total Caffeine:** ${r.totalMg}mg
-          - **Est. Cost:** ${r.cost}
-          - **Ratio:** ${Math.round(r.totalMg / r.servings)}mg per serving
-          `).join('\n')}
+${data.commits7d > 70 ? '\n**⚠️ Burnout Alert:** You\'ve averaged ' + Math.round(data.commits7d / 7) + ' commits/day. Consider slowing down!' : ''}
 
-          ---
+---
 
-          ## ⚠️ Health & Safety Status
-
-          ${data.warnings.healthStatus}
-
-          ${data.warnings.energyLevel}
-
-          ${data.warnings.burnoutStatus}
-
-          ---
-
-          ## 🎯 Personalized Recommendations
-
-          ${data.energy < 30 ? 
-            '### YOU NEED TO SLEEP 😴\nSeriously, caffeine won\'t help at this point. Go get 8 hours of sleep. We\'ll be here.' :
-            data.energy < 50 ?
-            '### Coffee Break Required ☕\nTake a 20-minute nap, stretch, drink water, THEN have caffeine. Your body is exhausted.' :
-            data.energy < 70 ?
-            '### Moderate Boost Recommended\nA single espresso or cup of tea should get you through the next 4 hours.' :
-            data.energy < 85 ?
-            '### Light Caffeine Optional\nYou\'re doing well! Light caffeine can help maintain momentum.' :
-            '### You Don\'t Need Caffeine\nYou\'re already crushing it! Stay hydrated and keep the momentum going.'}
-
-          ${data.commits7d > 70 ? 
-            '\n\n### ⚠️ BURNOUT ALERT\nYou\'ve averaged ' + Math.round(data.commits7d / 7) + ' commits per day this week. Consider:\n- Taking a day off\n- Working shorter hours\n- Saying "no" to new tasks\n- Talking to your team about workload' : ''}
-
-          ---
-
-          ## 📋 Quick Reference Table
-
-          | Scenario | What to Drink | Amount |
-          |----------|---------------|--------|
-          | **Quick Boost** | Espresso | 1-2 shots |
-          | **Sustained Energy** | Cold Brew | 1 cup |
-          | **Afternoon Pick-up** | Black Tea | 1 cup |
-          | **All-Nighter** | Energy Shot | 1 bottle |
-          | **Healthy Option** | Matcha Latte | 1 cup |
-          | **Just Say No** | Water | 2+ cups |
-
-          ---
-
-          **Report Generated:** ${new Date().toLocaleString()}
-          `;
+**Generated:** ${new Date().toLocaleString()}
+`;
 
           // Execute gh cli
           fs.writeFileSync('caffeine-report.md', markdown);
