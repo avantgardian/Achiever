@@ -292,7 +292,7 @@ jobs:
               if (remainingCaffeine <= 0) break;
               
               const item = caffeinProducts[product];
-              const servings = Math.ceil(remainingCaffeine / item.mg);
+              const servings = Math.max(1, Math.floor(remainingCaffeine / item.mg));
               
               if (servings > 0) {
                 recommendations.push({
