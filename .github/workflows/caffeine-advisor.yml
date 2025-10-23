@@ -61,59 +61,75 @@ jobs:
 
           function getCodeMetrics() {
             try {
-              // Debug: Log raw output (to stderr, not stdout)
-              console.error('DEBUG: Getting 24h code metrics...');
+              console.error('DEBUG: Getting code metrics with JavaScript parsing...');
               
-              // Try to get commits from last 24 hours
+              // Parse git numstat output in JavaScript instead of awk
+              function calculateLOC(gitLogOutput) {
+                let totalLOC = 0;
+                const lines = gitLogOutput.split('\n').filter(l => l.trim());
+                
+                for (const line of lines) {
+                  // numstat format: additions<tab>deletions<tab>filename
+                  const parts = line.split('\t');
+                  if (parts.length >= 2) {
+                    const additions = parseInt(parts[0]) || 0;
+                    const deletions = parseInt(parts[1]) || 0;
+                    // Count net changes (additions - deletions)
+                    totalLOC += Math.abs(additions - deletions);
+                  }
+                }
+                return totalLOC;
+              }
+              
+              // Get commits from last 24 hours
               let raw24h = '';
               try {
-                raw24h = execSync(`git log --since="24 hours ago" --numstat 2>/dev/null | awk 'NF {sum+=$1-$2} END {print sum+0}'`).toString().trim();
+                raw24h = execSync(`git log --since="24 hours ago" --numstat --pretty=""`, { encoding: 'utf-8' }).toString();
               } catch (e) {
                 raw24h = '';
               }
               
-              // Fallback: if no 24h data, use all commits
-              if (raw24h === '' || raw24h === '0') {
-                console.error('DEBUG: No commits in 24h window, using recent commits instead');
+              let locToday = calculateLOC(raw24h);
+              
+              // Fallback: if no 24h data, use last 20 commits
+              if (locToday === 0) {
+                console.error('DEBUG: No commits in 24h window, using recent commits...');
                 try {
-                  raw24h = execSync(`git log -20 --numstat 2>/dev/null | awk 'NF {sum+=$1-$2} END {print sum+0}'`).toString().trim();
+                  raw24h = execSync(`git log -20 --numstat --pretty=""`, { encoding: 'utf-8' }).toString();
+                  locToday = calculateLOC(raw24h);
                 } catch (e) {
-                  raw24h = '0';
+                  locToday = 0;
                 }
               }
               
-              console.error('DEBUG: Raw 24h output:', JSON.stringify(raw24h));
+              console.error('DEBUG: Calculated locToday:', locToday);
               
-              console.error('DEBUG: Getting 7d code metrics...');
+              // Get commits from last 7 days
               let raw7d = '';
               try {
-                raw7d = execSync(`git log --since="7 days ago" --numstat 2>/dev/null | awk 'NF {sum+=$1-$2} END {print sum+0}'`).toString().trim();
+                raw7d = execSync(`git log --since="7 days ago" --numstat --pretty=""`, { encoding: 'utf-8' }).toString();
               } catch (e) {
                 raw7d = '';
               }
               
+              let locWeek = calculateLOC(raw7d);
+              
               // Fallback: if no 7d data, use all commits
-              if (raw7d === '' || raw7d === '0') {
-                console.error('DEBUG: No commits in 7d window, using all commits instead');
+              if (locWeek === 0) {
+                console.error('DEBUG: No commits in 7d window, using all commits...');
                 try {
-                  raw7d = execSync(`git log --numstat 2>/dev/null | awk 'NF {sum+=$1-$2} END {print sum+0}'`).toString().trim();
+                  raw7d = execSync(`git log --numstat --pretty=""`, { encoding: 'utf-8' }).toString();
+                  locWeek = calculateLOC(raw7d);
                 } catch (e) {
-                  raw7d = '0';
+                  locWeek = 0;
                 }
               }
               
-              console.error('DEBUG: Raw 7d output:', JSON.stringify(raw7d));
-              
-              // Parse with safety checks
-              const locToday = raw24h === '' ? 0 : Number(raw24h);
-              const locWeek = raw7d === '' ? 0 : Number(raw7d);
-              
-              console.error('DEBUG: Parsed locToday:', locToday, 'isNaN:', isNaN(locToday));
-              console.error('DEBUG: Parsed locWeek:', locWeek, 'isNaN:', isNaN(locWeek));
+              console.error('DEBUG: Calculated locWeek:', locWeek);
               
               return {
-                locToday: isNaN(locToday) || locToday < -999999 ? 0 : locToday,
-                locWeek: isNaN(locWeek) || locWeek < -999999 ? 0 : locWeek
+                locToday: isNaN(locToday) || locToday < 0 ? 0 : locToday,
+                locWeek: isNaN(locWeek) || locWeek < 0 ? 0 : locWeek
               };
             } catch (e) {
               console.error('DEBUG: Error getting code metrics:', e.message);
