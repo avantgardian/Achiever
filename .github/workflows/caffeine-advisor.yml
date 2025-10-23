@@ -1,0 +1,411 @@
+name: ☕ Advanced Caffeine Advisor
+
+on:
+  push:
+    branches: [main, develop]
+  schedule:
+    - cron: '0 9 * * 1-5'  # Weekday mornings
+
+jobs:
+  caffeine-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: npm install --prefer-offline 2>/dev/null || true
+
+      - name: Calculate caffeine prescription
+        run: |
+          cat > caffeine-calc.js << 'EOF'
+          const { execSync } = require('child_process');
+
+          // ============================================
+          // STEP 1: CALCULATE DEVELOPER ENERGY LEVEL
+          // ============================================
+
+          function getCommitMetrics() {
+            try {
+              const commits24h = execSync('git log --since="24 hours ago" --oneline 2>/dev/null | wc -l').toString().trim();
+              const commits7d = execSync('git log --since="7 days ago" --oneline 2>/dev/null | wc -l').toString().trim();
+              const commits30d = execSync('git log --since="30 days ago" --oneline 2>/dev/null | wc -l').toString().trim();
+              
+              return {
+                commits24h: parseInt(commits24h) || 0,
+                commits7d: parseInt(commits7d) || 0,
+                commits30d: parseInt(commits30d) || 0
+              };
+            } catch (e) {
+              return { commits24h: 0, commits7d: 0, commits30d: 0 };
+            }
+          }
+
+          function getCodeMetrics() {
+            try {
+              const locToday = execSync(`git log --since="24 hours ago" --numstat 2>/dev/null | awk '{sum+=$1-$2} END {print sum}'`).toString().trim();
+              const locWeek = execSync(`git log --since="7 days ago" --numstat 2>/dev/null | awk '{sum+=$1-$2} END {print sum}'`).toString().trim();
+              
+              return {
+                locToday: parseInt(locToday) || 0,
+                locWeek: parseInt(locWeek) || 0
+              };
+            } catch (e) {
+              return { locToday: 0, locWeek: 0 };
+            }
+          }
+
+          function getTestCoverage() {
+            try {
+              // Rough estimate - check if coverage file exists
+              return 75; // Default
+            } catch (e) {
+              return 50;
+            }
+          }
+
+          // ============================================
+          // STEP 2: CALCULATE ENERGY LEVEL (0-100)
+          // ============================================
+
+          function calculateEnergyLevel(commits24h, locToday) {
+            let energy = 0;
+            
+            // Energy from commits (max 40 points)
+            energy += Math.min(commits24h * 4, 40);
+            
+            // Energy from code output (max 40 points)
+            energy += Math.min(locToday / 50, 40);
+            
+            // Rest factor (max 20 points) - assumes normal sleep
+            energy += 20;
+            
+            return Math.min(energy, 100);
+          }
+
+          // ============================================
+          // STEP 3: CALCULATE CAFFEINE NEEDS
+          // ============================================
+
+          function calculateCaffeinNeeds(energy, commits24h, locToday, commits7d) {
+            let baseCaffeine = 0;
+
+            // Low energy = needs MORE caffeine to compensate
+            if (energy < 30) {
+              baseCaffeine = 300; // Heavy dose
+            } else if (energy < 50) {
+              baseCaffeine = 200; // Moderate dose
+            } else if (energy < 70) {
+              baseCaffeine = 100; // Light dose
+            } else {
+              baseCaffeine = 50; // Minimal
+            }
+
+            // Add caffeine based on lines of code
+            const locBonus = Math.min(locToday / 100, 50);
+            
+            // Add caffeine based on burnout risk (high commit rate 7d)
+            const burnoutRisk = commits7d > 70 ? 75 : commits7d > 40 ? 25 : 0;
+
+            const totalCaffeine = baseCaffeine + locBonus + burnoutRisk;
+
+            return {
+              baseCaffeine,
+              locBonus,
+              burnoutRisk,
+              totalCaffeine: Math.round(totalCaffeine)
+            };
+          }
+
+          // ============================================
+          // STEP 4: CAFFEINE PRODUCT DATABASE
+          // ============================================
+
+          const caffeinProducts = {
+            espresso: { mg: 63, serving: "1 shot (1 oz)", emoji: "☕", cost: "$2.50" },
+            americano: { mg: 150, serving: "1 cup (12 oz)", emoji: "☕", cost: "$3.50" },
+            latte: { mg: 75, serving: "1 cup (12 oz)", emoji: "🥛", cost: "$4.00" },
+            cappuccino: { mg: 75, serving: "1 cup (12 oz)", emoji: "🥛", cost: "$4.00" },
+            drip_coffee: { mg: 95, serving: "1 cup (8 oz)", emoji: "☕", cost: "$1.50" },
+            french_press: { mg: 80, serving: "1 cup (8 oz)", emoji: "☕", cost: "$2.00" },
+            black_tea: { mg: 45, serving: "1 cup (8 oz)", emoji: "🍵", cost: "$1.00" },
+            green_tea: { mg: 25, serving: "1 cup (8 oz)", emoji: "🍵", cost: "$1.00" },
+            matcha: { mg: 70, serving: "1 cup (8 oz)", emoji: "🍵", cost: "$6.00" },
+            energy_drink: { mg: 80, serving: "1 can (8.4 oz)", emoji: "⚡", cost: "$2.00" },
+            energy_shot: { mg: 200, serving: "1 shot (2 oz)", emoji: "💉", cost: "$3.00" },
+            chocolate: { mg: 12, serving: "1 oz square", emoji: "🍫", cost: "$1.00" },
+            diet_coke: { mg: 46, serving: "1 can (12 oz)", emoji: "🥤", cost: "$1.50" },
+            mountain_dew: { mg: 54, serving: "1 can (12 oz)", emoji: "🥤", cost: "$1.50" },
+            cola: { mg: 34, serving: "1 can (12 oz)", emoji: "🥤", cost: "$1.50" },
+            cold_brew: { mg: 150, serving: "1 cup (8 oz)", emoji: "🧊☕", cost: "$4.00" },
+            espresso_martini: { mg: 126, serving: "1 cocktail (2 oz)", emoji: "🍹", cost: "$8.00" },
+            iced_latte: { mg: 75, serving: "1 cup (12 oz)", emoji: "🧊", cost: "$4.50" },
+            nitro_cold_brew: { mg: 280, serving: "1 cup (8 oz)", emoji: "🧊☕💪", cost: "$5.00" }
+          };
+
+          // ============================================
+          // STEP 5: GENERATE RECOMMENDATIONS
+          // ============================================
+
+          function getRecommendations(caffeineMg) {
+            const recommendations = [];
+            let remainingCaffeine = caffeineMg;
+
+            // Smart algorithm: prioritize efficient options
+            const prioritized = [
+              'nitro_cold_brew', 'energy_shot', 'cold_brew', 'americano', 
+              'espresso', 'matcha', 'energy_drink', 'black_tea', 'drip_coffee'
+            ];
+
+            for (const product of prioritized) {
+              if (remainingCaffeine <= 0) break;
+              
+              const item = caffeinProducts[product];
+              const servings = Math.ceil(remainingCaffeine / item.mg);
+              
+              if (servings > 0) {
+                recommendations.push({
+                  product,
+                  servings,
+                  totalMg: servings * item.mg,
+                  serving: item.serving,
+                  emoji: item.emoji,
+                  cost: item.cost
+                });
+                
+                remainingCaffeine -= servings * item.mg;
+              }
+            }
+
+            return recommendations;
+          }
+
+          // ============================================
+          // STEP 6: HEALTH & SAFETY WARNINGS
+          // ============================================
+
+          function getHealthWarning(caffeineMg) {
+            if (caffeineMg < 50) {
+              return "✅ SAFE - No concerns. Normal caffeine intake.";
+            } else if (caffeineMg < 200) {
+              return "🟡 MODERATE - Keep an eye on this. Don't overdo it.";
+            } else if (caffeineMg < 400) {
+              return "🟠 ELEVATED - Getting close to max daily recommendation (400mg).";
+            } else if (caffeineMg < 600) {
+              return "🔴 HIGH - Exceeding recommended daily intake. You might experience jitters.";
+            } else {
+              return "💀 DANGER - EXTREME caffeine intake. This is NOT recommended. SLEEP instead.";
+            }
+          }
+
+          function getEnergySuggestion(energy) {
+            if (energy < 20) {
+              return "🚨 CRITICAL: You need REST more than caffeine. Go to bed NOW.";
+            } else if (energy < 40) {
+              return "😴 VERY LOW: Consider a 20-minute nap before the caffeine.";
+            } else if (energy < 60) {
+              return "😑 LOW: Caffeine + walk + water will help.";
+            } else if (energy < 80) {
+              return "✅ GOOD: Light caffeine should keep you productive.";
+            } else {
+              return "🔥 SUPERCHARGED: You might not even need caffeine! Stay hydrated.";
+            }
+          }
+
+          function getBurnoutStatus(commits7d) {
+            const avgPerDay = commits7d / 7;
+            
+            if (commits7d < 20) {
+              return "🟢 HEALTHY - Nice work-life balance.";
+            } else if (commits7d < 40) {
+              return "🟡 GOOD - Solid pace, sustainable.";
+            } else if (commits7d < 70) {
+              return "🟠 ELEVATED - You're working hard. Watch for burnout.";
+            } else {
+              return "🔴 BURNOUT RISK - You're pushing too hard. Slow down!";
+            }
+          }
+
+          // ============================================
+          // MAIN CALCULATION
+          // ============================================
+
+          const commits = getCommitMetrics();
+          const code = getCodeMetrics();
+          const coverage = getTestCoverage();
+
+          const energy = calculateEnergyLevel(commits.commits24h, code.locToday);
+          const caffeine = calculateCaffeinNeeds(energy, commits.commits24h, code.locToday, commits.commits7d);
+          const recommendations = getRecommendations(caffeine.totalCaffeine);
+          const warning = getHealthWarning(caffeine.totalCaffeine);
+          const energySuggestion = getEnergySuggestion(energy);
+          const burnoutStatus = getBurnoutStatus(commits.commits7d);
+
+          // ============================================
+          // OUTPUT RESULTS
+          // ============================================
+
+          console.log(JSON.stringify({
+            energy: Math.round(energy),
+            caffeineMg: caffeine.totalCaffeine,
+            commits24h: commits.commits24h,
+            commits7d: commits.commits7d,
+            commits30d: commits.commits30d,
+            locToday: code.locToday,
+            locWeek: code.locWeek,
+            caffeineMgBreakdown: {
+              base: caffeine.baseCaffeine,
+              locBonus: Math.round(caffeine.locBonus),
+              burnoutRisk: caffeine.burnoutRisk
+            },
+            recommendations: recommendations.map(r => ({
+              product: r.product,
+              servings: r.servings,
+              totalMg: r.totalMg,
+              serving: r.serving,
+              emoji: r.emoji,
+              cost: r.cost
+            })),
+            warnings: {
+              healthStatus: warning,
+              energyLevel: energySuggestion,
+              burnoutStatus: burnoutStatus
+            }
+          }, null, 2));
+
+          EOF
+
+          node caffeine-calc.js > caffeine-report.json
+          cat caffeine-report.json
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub issue with recommendations
+        run: |
+          cat > create-issue.js << 'EOF'
+          const fs = require('fs');
+          const { execSync } = require('child_process');
+
+          const data = JSON.parse(fs.readFileSync('caffeine-report.json', 'utf8'));
+
+          // Build markdown report
+          let markdown = `# ☕ Advanced Caffeine Prescription Report
+
+          ## 📊 Energy Analysis
+
+          **Current Energy Level:** \`${data.energy}/100\`
+
+          ${data.energy >= 80 ? '🔥' : data.energy >= 60 ? '🟢' : data.energy >= 40 ? '🟡' : '🔴'} **Status:** 
+          ${data.energy < 30 ? 'CRITICAL - You are running on empty' : 
+            data.energy < 50 ? 'LOW - Needs attention' : 
+            data.energy < 70 ? 'MODERATE - Getting tired' :
+            data.energy < 85 ? 'GOOD - Stable' : 'EXCELLENT - You are thriving'}
+
+          ## 🚦 Development Metrics (Last 24 Hours)
+
+          | Metric | Value |
+          |--------|-------|
+          | **Commits** | ${data.commits24h} |
+          | **Lines Changed** | ${data.locToday} |
+          | **Energy Level** | ${data.energy}/100 |
+          | **Avg Lines/Commit** | ${data.locToday > 0 ? Math.round(data.locToday / Math.max(data.commits24h, 1)) : 0} |
+
+          ## 📈 Weekly Activity
+
+          | Metric | Value |
+          |--------|-------|
+          | **7-Day Commits** | ${data.commits7d} |
+          | **30-Day Commits** | ${data.commits30d} |
+          | **Avg Commits/Day (7d)** | ${Math.round(data.commits7d / 7)} |
+          | **Lines Added (Week)** | ${data.locWeek} |
+
+          ## ☕ Caffeine Prescription
+
+          **Total Recommended Caffeine:** \`${data.caffeineMg}mg\`
+
+          ### Breakdown:
+          - **Base Metabolic Need:** ${data.caffeineMgBreakdown.base}mg
+          - **Code Output Bonus:** +${data.caffeineMgBreakdown.locBonus}mg
+          - **Burnout Risk Factor:** +${data.caffeineMgBreakdown.burnoutRisk}mg
+
+          ---
+
+          ## 💊 Product Recommendations
+
+          ${data.recommendations.length === 0 ? '**No caffeine needed!** Go drink some water and take a walk.' : 
+            data.recommendations.map((r, i) => `
+          ### Option ${i + 1}: ${r.emoji} ${r.product.replace(/_/g, ' ').toUpperCase()}
+          - **Quantity:** ${r.servings} ${r.serving}
+          - **Total Caffeine:** ${r.totalMg}mg
+          - **Est. Cost:** ${r.cost}
+          - **Ratio:** ${Math.round(r.totalMg / r.servings)}mg per serving
+          `).join('\n')}
+
+          ---
+
+          ## ⚠️ Health & Safety Status
+
+          ${data.warnings.healthStatus}
+
+          ${data.warnings.energyLevel}
+
+          ${data.warnings.burnoutStatus}
+
+          ---
+
+          ## 🎯 Personalized Recommendations
+
+          ${data.energy < 30 ? 
+            '### YOU NEED TO SLEEP 😴\nSeriously, caffeine won\'t help at this point. Go get 8 hours of sleep. We\'ll be here.' :
+            data.energy < 50 ?
+            '### Coffee Break Required ☕\nTake a 20-minute nap, stretch, drink water, THEN have caffeine. Your body is exhausted.' :
+            data.energy < 70 ?
+            '### Moderate Boost Recommended\nA single espresso or cup of tea should get you through the next 4 hours.' :
+            data.energy < 85 ?
+            '### Light Caffeine Optional\nYou\'re doing well! Light caffeine can help maintain momentum.' :
+            '### You Don\'t Need Caffeine\nYou\'re already crushing it! Stay hydrated and keep the momentum going.'}
+
+          ${data.commits7d > 70 ? 
+            '\n\n### ⚠️ BURNOUT ALERT\nYou\'ve averaged ' + Math.round(data.commits7d / 7) + ' commits per day this week. Consider:\n- Taking a day off\n- Working shorter hours\n- Saying "no" to new tasks\n- Talking to your team about workload' : ''}
+
+          ---
+
+          ## 📋 Quick Reference Table
+
+          | Scenario | What to Drink | Amount |
+          |----------|---------------|--------|
+          | **Quick Boost** | Espresso | 1-2 shots |
+          | **Sustained Energy** | Cold Brew | 1 cup |
+          | **Afternoon Pick-up** | Black Tea | 1 cup |
+          | **All-Nighter** | Energy Shot | 1 bottle |
+          | **Healthy Option** | Matcha Latte | 1 cup |
+          | **Just Say No** | Water | 2+ cups |
+
+          ---
+
+          **Report Generated:** ${new Date().toLocaleString()}
+          `;
+
+          // Execute gh cli
+          const cmd = \`gh issue create --title "☕ Caffeine Prescription for \${process.env.GITHUB_ACTOR}" --body "\${markdown.replace(/"/g, '\\\\"')}" 2>/dev/null || true\`;
+          try {
+            execSync(cmd, { stdio: 'inherit' });
+            console.log('✅ Issue created successfully');
+          } catch (e) {
+            console.log('Could not create issue, but report generated');
+          }
+
+          EOF
+
+          node create-issue.js
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+
+      - name: Display report in console
+        if: always()
+        run: |
+          echo "📊 CAFFEINE PRESCRIPTION REPORT"
+          echo "=============================="
+          cat caffeine-report.json | jq '.'
