@@ -6,6 +6,10 @@ on:
   schedule:
     - cron: '0 9 * * 1-5'  # Weekday mornings
 
+permissions:
+  contents: read
+  issues: write
+
 jobs:
   caffeine-analysis:
     runs-on: ubuntu-latest
@@ -44,17 +48,28 @@ jobs:
 
           function getCodeMetrics() {
             try {
-              const locToday = execSync(`git log --since="24 hours ago" --numstat 2>/dev/null | awk 'NF {sum+=$1-$2} END {print sum+0}'`).toString().trim();
-              const locWeek = execSync(`git log --since="7 days ago" --numstat 2>/dev/null | awk 'NF {sum+=$1-$2} END {print sum+0}'`).toString().trim();
+              // Debug: Log raw output
+              console.log('DEBUG: Getting 24h code metrics...');
+              const raw24h = execSync(`git log --since="24 hours ago" --numstat 2>/dev/null | awk 'NF {sum+=$1-$2} END {print sum+0}'`).toString().trim();
+              console.log('DEBUG: Raw 24h output:', JSON.stringify(raw24h));
               
-              const parsedToday = Number(locToday);
-              const parsedWeek = Number(locWeek);
+              console.log('DEBUG: Getting 7d code metrics...');
+              const raw7d = execSync(`git log --since="7 days ago" --numstat 2>/dev/null | awk 'NF {sum+=$1-$2} END {print sum+0}'`).toString().trim();
+              console.log('DEBUG: Raw 7d output:', JSON.stringify(raw7d));
+              
+              // Parse with safety checks
+              const locToday = raw24h === '' ? 0 : Number(raw24h);
+              const locWeek = raw7d === '' ? 0 : Number(raw7d);
+              
+              console.log('DEBUG: Parsed locToday:', locToday, 'isNaN:', isNaN(locToday));
+              console.log('DEBUG: Parsed locWeek:', locWeek, 'isNaN:', isNaN(locWeek));
               
               return {
-                locToday: isNaN(parsedToday) ? 0 : parsedToday,
-                locWeek: isNaN(parsedWeek) ? 0 : parsedWeek
+                locToday: isNaN(locToday) || locToday < -999999 ? 0 : locToday,
+                locWeek: isNaN(locWeek) || locWeek < -999999 ? 0 : locWeek
               };
             } catch (e) {
+              console.error('DEBUG: Error getting code metrics:', e.message);
               return { locToday: 0, locWeek: 0 };
             }
           }
