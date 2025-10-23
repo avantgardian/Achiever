@@ -48,21 +48,21 @@ jobs:
 
           function getCodeMetrics() {
             try {
-              // Debug: Log raw output
-              console.log('DEBUG: Getting 24h code metrics...');
+              // Debug: Log raw output (to stderr, not stdout)
+              console.error('DEBUG: Getting 24h code metrics...');
               const raw24h = execSync(`git log --since="24 hours ago" --numstat 2>/dev/null | awk 'NF {sum+=$1-$2} END {print sum+0}'`).toString().trim();
-              console.log('DEBUG: Raw 24h output:', JSON.stringify(raw24h));
+              console.error('DEBUG: Raw 24h output:', JSON.stringify(raw24h));
               
-              console.log('DEBUG: Getting 7d code metrics...');
+              console.error('DEBUG: Getting 7d code metrics...');
               const raw7d = execSync(`git log --since="7 days ago" --numstat 2>/dev/null | awk 'NF {sum+=$1-$2} END {print sum+0}'`).toString().trim();
-              console.log('DEBUG: Raw 7d output:', JSON.stringify(raw7d));
+              console.error('DEBUG: Raw 7d output:', JSON.stringify(raw7d));
               
               // Parse with safety checks
               const locToday = raw24h === '' ? 0 : Number(raw24h);
               const locWeek = raw7d === '' ? 0 : Number(raw7d);
               
-              console.log('DEBUG: Parsed locToday:', locToday, 'isNaN:', isNaN(locToday));
-              console.log('DEBUG: Parsed locWeek:', locWeek, 'isNaN:', isNaN(locWeek));
+              console.error('DEBUG: Parsed locToday:', locToday, 'isNaN:', isNaN(locToday));
+              console.error('DEBUG: Parsed locWeek:', locWeek, 'isNaN:', isNaN(locWeek));
               
               return {
                 locToday: isNaN(locToday) || locToday < -999999 ? 0 : locToday,
@@ -415,21 +415,21 @@ jobs:
           const title = `☕ Caffeine Prescription for ${process.env.GITHUB_ACTOR}`;
           const cmd = `gh issue create --title "${title}" --body-file caffeine-report.md`;
           
-          console.log('Attempting to create issue with gh cli...');
-          console.log('Title:', title);
-          console.log('GH_TOKEN set:', !!process.env.GH_TOKEN);
-          console.log('GITHUB_ACTOR:', process.env.GITHUB_ACTOR);
+          console.error('Attempting to create issue with gh cli...');
+          console.error('Title:', title);
+          console.error('GH_TOKEN set:', !!process.env.GH_TOKEN);
+          console.error('GITHUB_ACTOR:', process.env.GITHUB_ACTOR);
           
           try {
             const result = execSync(cmd, { encoding: 'utf-8' });
-            console.log('✅ Issue created successfully');
-            console.log('Result:', result);
+            console.error('✅ Issue created successfully');
+            console.error('Result:', result);
           } catch (e) {
             console.error('❌ Error creating issue:');
             console.error('Command:', cmd);
             console.error('Error:', e.message);
             console.error('Stderr:', e.stderr ? e.stderr.toString() : 'N/A');
-            console.log('But report was still generated in caffeine-report.md');
+            console.error('But report was still generated in caffeine-report.md');
           }
 
           EOF
