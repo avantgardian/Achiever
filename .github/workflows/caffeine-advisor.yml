@@ -286,7 +286,7 @@ jobs:
               width += (char.charCodeAt(0) > 127) ? 2 : 1;
             }
             const padding = Math.max(0, 59 - width);
-            return '║' + content + ' '.repeat(padding) + '║';
+            return '║ ' + content + ' '.repeat(padding);
           }
           
           console.log('\n');
