@@ -72,6 +72,10 @@ jobs:
           function calculateEnergyLevel(commits24h, locToday) {
             let energy = 0;
             
+            // Validate inputs
+            commits24h = isNaN(commits24h) ? 0 : commits24h;
+            locToday = isNaN(locToday) ? 0 : locToday;
+            
             // Energy from commits (max 40 points)
             energy += Math.min(commits24h * 4, 40);
             
@@ -81,7 +85,7 @@ jobs:
             // Rest factor (max 20 points) - assumes normal sleep
             energy += 20;
             
-            return Math.min(energy, 100);
+            return Math.min(Math.max(energy, 0), 100);
           }
 
           // ============================================
@@ -391,12 +395,23 @@ jobs:
           fs.writeFileSync('caffeine-report.md', markdown);
           
           const title = `☕ Caffeine Prescription for ${process.env.GITHUB_ACTOR}`;
-          const cmd = `gh issue create --title "${title}" --body-file caffeine-report.md 2>/dev/null || true`;
+          const cmd = `gh issue create --title "${title}" --body-file caffeine-report.md`;
+          
+          console.log('Attempting to create issue with gh cli...');
+          console.log('Title:', title);
+          console.log('GH_TOKEN set:', !!process.env.GH_TOKEN);
+          console.log('GITHUB_ACTOR:', process.env.GITHUB_ACTOR);
+          
           try {
-            execSync(cmd, { stdio: 'inherit' });
+            const result = execSync(cmd, { encoding: 'utf-8' });
             console.log('✅ Issue created successfully');
+            console.log('Result:', result);
           } catch (e) {
-            console.log('Could not create issue, but report generated');
+            console.error('❌ Error creating issue:');
+            console.error('Command:', cmd);
+            console.error('Error:', e.message);
+            console.error('Stderr:', e.stderr ? e.stderr.toString() : 'N/A');
+            console.log('But report was still generated in caffeine-report.md');
           }
 
           EOF
