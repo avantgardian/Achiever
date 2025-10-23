@@ -44,12 +44,15 @@ jobs:
 
           function getCodeMetrics() {
             try {
-              const locToday = execSync(`git log --since="24 hours ago" --numstat 2>/dev/null | awk '{sum+=$1-$2} END {print sum}'`).toString().trim();
-              const locWeek = execSync(`git log --since="7 days ago" --numstat 2>/dev/null | awk '{sum+=$1-$2} END {print sum}'`).toString().trim();
+              const locToday = execSync(`git log --since="24 hours ago" --numstat 2>/dev/null | awk 'NF {sum+=$1-$2} END {print sum+0}'`).toString().trim();
+              const locWeek = execSync(`git log --since="7 days ago" --numstat 2>/dev/null | awk 'NF {sum+=$1-$2} END {print sum+0}'`).toString().trim();
+              
+              const parsedToday = Number(locToday);
+              const parsedWeek = Number(locWeek);
               
               return {
-                locToday: parseInt(locToday) || 0,
-                locWeek: parseInt(locWeek) || 0
+                locToday: isNaN(parsedToday) ? 0 : parsedToday,
+                locWeek: isNaN(parsedWeek) ? 0 : parsedWeek
               };
             } catch (e) {
               return { locToday: 0, locWeek: 0 };
@@ -283,7 +286,7 @@ jobs:
           node caffeine-calc.js > caffeine-report.json
           cat caffeine-report.json
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub issue with recommendations
         run: |
@@ -418,7 +421,7 @@ jobs:
 
           node create-issue.js
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
 
       - name: Display report in console
