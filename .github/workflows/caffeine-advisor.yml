@@ -289,6 +289,16 @@ jobs:
             return '║ ' + content + ' '.repeat(padding);
           }
           
+          // For section headers (with right border)
+          function headerLine(content) {
+            let width = 0;
+            for (const char of content) {
+              width += (char.charCodeAt(0) > 127) ? 2 : 1;
+            }
+            const padding = Math.max(0, 59 - width);
+            return '║ ' + content + ' '.repeat(padding) + ' ║';
+          }
+          
           console.log('\n');
           console.log('╔════════════════════════════════════════════════════════════╗');
           console.log('║          ☕ CAFFEINE PRESCRIPTION REPORT                    ║');
@@ -303,9 +313,7 @@ jobs:
           console.log('');
           
           // Metrics Table
-          console.log('╔════════════════════════════════════════════════════════════╗');
-          console.log(padLine('  📈 DEVELOPMENT ACTIVITY'));
-          console.log('╠════════════════════════════════════════════════════════════╣');
+          console.log(headerLine('  📈 DEVELOPMENT ACTIVITY'));
           console.log(padLine(`  Commits (24h)${' '.repeat(13)}${data.commits24h}`));
           console.log(padLine(`  Commits (7d)${' '.repeat(14)}${data.commits7d}`));
           console.log(padLine(`  Lines Changed (24h)${' '.repeat(7)}${data.locToday}`));
@@ -315,9 +323,7 @@ jobs:
           console.log('');
           
           // Caffeine Prescription
-          console.log('╔════════════════════════════════════════════════════════════╗');
-          console.log(padLine('  ☕ CAFFEINE PRESCRIPTION'));
-          console.log('╠════════════════════════════════════════════════════════════╣');
+          console.log(headerLine('  ☕ CAFFEINE PRESCRIPTION'));
           console.log(padLine(`  Total Recommended: ${data.caffeineMg}mg`));
           console.log(padLine(`    • Base need:${' '.repeat(20)}${data.caffeineMgBreakdown.base}mg`));
           console.log(padLine(`    • Code output bonus:${' '.repeat(12)}+${data.caffeineMgBreakdown.locBonus}mg`));
@@ -326,9 +332,7 @@ jobs:
           console.log('');
           
           // Recommendations
-          console.log('╔════════════════════════════════════════════════════════════╗');
-          console.log(padLine('  💊 PRODUCT RECOMMENDATIONS'));
-          console.log('╠════════════════════════════════════════════════════════════╣');
+          console.log(headerLine('  💊 PRODUCT RECOMMENDATIONS'));
           if (data.recommendations.length === 0) {
             console.log(padLine('  No caffeine needed! Go drink water and take a walk.'));
           } else {
