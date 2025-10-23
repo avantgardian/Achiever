@@ -421,7 +421,7 @@ jobs:
           ${data.recommendations.length === 0 ? '**No caffeine needed!** Go drink some water and take a walk.' : 
             data.recommendations.map((r, i) => `
           ### Option ${i + 1}: ${r.emoji} ${r.product.replace(/_/g, ' ').toUpperCase()}
-          - **Quantity:** ${r.servings} ${r.serving}
+          - **Amount:** ${r.servings} × ${r.serving}
           - **Total Caffeine:** ${r.totalMg}mg
           - **Est. Cost:** ${r.cost}
           - **Ratio:** ${Math.round(r.totalMg / r.servings)}mg per serving
