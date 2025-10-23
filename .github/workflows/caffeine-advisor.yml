@@ -288,46 +288,45 @@ jobs:
           const energyStatus = data.energy >= 80 ? '🔥 EXCELLENT' : 
                                data.energy >= 60 ? '🟢 GOOD' : 
                                data.energy >= 40 ? '🟡 LOW' : '🔴 CRITICAL';
-          console.log('📊 ENERGY STATUS');
-          console.log('─'.repeat(60));
-          console.log(`  Energy Level:  ${data.energy}/100 (${energyStatus})`);
+          console.log(`Energy Level: ${data.energy}/100 (${energyStatus})`);
           console.log('');
           
           // Metrics Table
-          console.log('📈 DEVELOPMENT ACTIVITY');
-          console.log('─'.repeat(60));
-          console.log(`  ${'Commits (24h)'.padEnd(25)} ${data.commits24h}`);
-          console.log(`  ${'Commits (7d)'.padEnd(25)} ${data.commits7d}`);
-          console.log(`  ${'Lines Changed (24h)'.padEnd(25)} ${data.locToday}`);
-          console.log(`  ${'Lines Changed (7d)'.padEnd(25)} ${data.locWeek}`);
-          console.log(`  ${'Avg Lines/Commit'.padEnd(25)} ${data.locToday > 0 ? Math.round(data.locToday / Math.max(data.commits24h, 1)) : 0}`);
+          console.log('╔════════════════════════════════════════════════════════════╗');
+          console.log('║  📈 DEVELOPMENT ACTIVITY                                   ║');
+          console.log('╠════════════════════════════════════════════════════════════╣');
+          console.log(`║  ${'Commits (24h)'.padEnd(25)} ${String(data.commits24h).padEnd(30)} ║`);
+          console.log(`║  ${'Commits (7d)'.padEnd(25)} ${String(data.commits7d).padEnd(30)} ║`);
+          console.log(`║  ${'Lines Changed (24h)'.padEnd(25)} ${String(data.locToday).padEnd(30)} ║`);
+          console.log(`║  ${'Lines Changed (7d)'.padEnd(25)} ${String(data.locWeek).padEnd(30)} ║`);
+          console.log(`║  ${'Avg Lines/Commit'.padEnd(25)} ${String(data.locToday > 0 ? Math.round(data.locToday / Math.max(data.commits24h, 1)) : 0).padEnd(30)} ║`);
+          console.log('╚════════════════════════════════════════════════════════════╝');
           console.log('');
           
           // Caffeine Prescription
-          console.log('☕ CAFFEINE PRESCRIPTION');
-          console.log('─'.repeat(60));
-          console.log(`  Total Recommended:  ${data.caffeineMg}mg`);
-          console.log(`    • Base need:            ${data.caffeineMgBreakdown.base}mg`);
-          console.log(`    • Code output bonus:    +${data.caffeineMgBreakdown.locBonus}mg`);
-          console.log(`    • Burnout risk factor:  +${data.caffeineMgBreakdown.burnoutRisk}mg`);
+          console.log('╔════════════════════════════════════════════════════════════╗');
+          console.log('║  ☕ CAFFEINE PRESCRIPTION                                   ║');
+          console.log('╠════════════════════════════════════════════════════════════╣');
+          console.log(`║  Total Recommended: ${data.caffeineMg}mg`.padEnd(61) + '║');
+          console.log(`║    • Base need:            ${data.caffeineMgBreakdown.base}mg`.padEnd(61) + '║');
+          console.log(`║    • Code output bonus:    +${data.caffeineMgBreakdown.locBonus}mg`.padEnd(61) + '║');
+          console.log(`║    • Burnout risk factor:  +${data.caffeineMgBreakdown.burnoutRisk}mg`.padEnd(61) + '║');
+          console.log('╚════════════════════════════════════════════════════════════╝');
           console.log('');
           
           // Recommendations
-          console.log('💊 PRODUCT RECOMMENDATIONS');
-          console.log('─'.repeat(60));
+          console.log('╔════════════════════════════════════════════════════════════╗');
+          console.log('║  💊 PRODUCT RECOMMENDATIONS                                ║');
+          console.log('╠════════════════════════════════════════════════════════════╣');
           if (data.recommendations.length === 0) {
-            console.log('  No caffeine needed! Go drink water and take a walk.');
+            console.log('║  No caffeine needed! Go drink water and take a walk.       ║');
           } else {
             data.recommendations.forEach((r, i) => {
-              console.log(`  ${i + 1}. ${r.emoji} ${r.product.replace(/_/g, ' ').toUpperCase()}`);
-              console.log(`     Amount: ${r.servings} × ${r.serving}`);
-              console.log(`     Caffeine: ${r.totalMg}mg | Cost: ${r.cost}`);
-              if (i < data.recommendations.length - 1) console.log('');
+              console.log(`║  ${i + 1}. ${r.emoji} ${r.product.replace(/_/g, ' ').toUpperCase()}`.padEnd(61) + '║');
+              console.log(`║     Amount: ${r.servings} × ${r.serving}`.padEnd(61) + '║');
+              console.log(`║     Caffeine: ${r.totalMg}mg | Cost: ${r.cost}`.padEnd(61) + '║');
             });
           }
-          console.log('');
-          console.log('╔════════════════════════════════════════════════════════════╗');
-          console.log('║  Generated: ' + new Date().toLocaleString().padEnd(50) + '║');
           console.log('╚════════════════════════════════════════════════════════════╝');
           console.log('');
           EOF
