@@ -388,7 +388,10 @@ jobs:
           `;
 
           // Execute gh cli
-          const cmd = \`gh issue create --title "☕ Caffeine Prescription for \${process.env.GITHUB_ACTOR}" --body "\${markdown.replace(/"/g, '\\\\"')}" 2>/dev/null || true\`;
+          fs.writeFileSync('caffeine-report.md', markdown);
+          
+          const title = `☕ Caffeine Prescription for ${process.env.GITHUB_ACTOR}`;
+          const cmd = `gh issue create --title "${title}" --body-file caffeine-report.md 2>/dev/null || true`;
           try {
             execSync(cmd, { stdio: 'inherit' });
             console.log('✅ Issue created successfully');
