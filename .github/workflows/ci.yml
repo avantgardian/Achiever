@@ -279,36 +279,20 @@ jobs:
           // ============================================
 
           function getRecommendations(caffeineMg) {
-            const recommendations = [];
-            let remainingCaffeine = caffeineMg;
-
-            // Smart algorithm: prioritize efficient options
-            const prioritized = [
-              'nitro_cold_brew', 'energy_shot', 'cold_brew', 'americano', 
-              'espresso', 'matcha', 'energy_drink', 'black_tea', 'drip_coffee'
-            ];
-
-            for (const product of prioritized) {
-              if (remainingCaffeine <= 0) break;
-              
-              const item = caffeinProducts[product];
-              const servings = Math.max(1, Math.floor(remainingCaffeine / item.mg));
-              
-              if (servings > 0) {
-                recommendations.push({
-                  product,
-                  servings,
-                  totalMg: servings * item.mg,
-                  serving: item.serving,
-                  emoji: item.emoji,
-                  cost: item.cost
-                });
-                
-                remainingCaffeine -= servings * item.mg;
-              }
-            }
-
-            return recommendations;
+            const productKeys = Object.keys(caffeinProducts);
+            const randomProduct = productKeys[Math.floor(Math.random() * productKeys.length)];
+            const item = caffeinProducts[randomProduct];
+            
+            const servings = Math.ceil(caffeineMg / item.mg);
+            
+            return [{
+              product: randomProduct,
+              servings,
+              totalMg: servings * item.mg,
+              serving: item.serving,
+              emoji: item.emoji,
+              cost: item.cost
+            }];
           }
 
           // ============================================
