@@ -304,7 +304,7 @@ jobs:
           
           // Metrics Table
           console.log('╔════════════════════════════════════════════════════════════╗');
-          console.log('║          📈 DEVELOPMENT ACTIVITY                           ║');
+          console.log('║           ☕ DEVELOPMENT ACTIVITY                          ║');
           console.log('╠════════════════════════════════════════════════════════════╣');
           console.log(padLine(`  Commits (24h)${' '.repeat(13)}${data.commits24h}`));
           console.log(padLine(`  Commits (7d)${' '.repeat(14)}${data.commits7d}`));
@@ -327,7 +327,7 @@ jobs:
           
           // Recommendations
           console.log('╔════════════════════════════════════════════════════════════╗');
-          console.log('║          💊 PRODUCT RECOMMENDATIONS                        ║');
+          console.log('║           ☕ PRODUCT RECOMMENDATIONS                        ║');
           console.log('╠════════════════════════════════════════════════════════════╣');
           if (data.recommendations.length === 0) {
             console.log(padLine('  No caffeine needed! Go drink water and take a walk.'));
