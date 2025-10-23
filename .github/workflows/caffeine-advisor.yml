@@ -301,59 +301,59 @@ jobs:
           const data = JSON.parse(fs.readFileSync('caffeine-report.json', 'utf8'));
 
           // Build markdown report
-          let markdown = `# ☕ Caffeine Prescription Report
+          let markdown = (`# ☕ Caffeine Prescription Report
 
-## 📊 Energy Status
+          ## 📊 Energy Status
 
-**Energy Level:** ${data.energy}/100
-${data.energy >= 80 ? '🔥 EXCELLENT - You are thriving!' : 
-  data.energy >= 60 ? '🟢 GOOD - Stable' : 
-  data.energy >= 40 ? '🟡 LOW - Needs attention' : 
-  '🔴 CRITICAL - You need REST'}
+          **Energy Level:** ${data.energy}/100
+          ${data.energy >= 80 ? '🔥 EXCELLENT - You are thriving!' : 
+            data.energy >= 60 ? '🟢 GOOD - Stable' : 
+            data.energy >= 40 ? '🟡 LOW - Needs attention' : 
+            '🔴 CRITICAL - You need REST'}
 
----
+          ---
 
-## 📈 Development Activity (Last 24h / Last 7d)
+          ## 📈 Development Activity (Last 24h / Last 7d)
 
-| Metric | 24h | 7d |
-|--------|-----|-----|
-| **Commits** | ${data.commits24h} | ${data.commits7d} |
-| **Lines Changed** | ${data.locToday} | ${data.locWeek} |
-| **Avg Lines/Commit** | ${data.locToday > 0 ? Math.round(data.locToday / Math.max(data.commits24h, 1)) : 0} | ${data.locWeek > 0 ? Math.round(data.locWeek / Math.max(data.commits7d, 1)) : 0} |
+          | Metric | 24h | 7d |
+          |--------|-----|-----|
+          | **Commits** | ${data.commits24h} | ${data.commits7d} |
+          | **Lines Changed** | ${data.locToday} | ${data.locWeek} |
+          | **Avg Lines/Commit** | ${data.locToday > 0 ? Math.round(data.locToday / Math.max(data.commits24h, 1)) : 0} | ${data.locWeek > 0 ? Math.round(data.locWeek / Math.max(data.commits7d, 1)) : 0} |
 
----
+          ---
 
-## ☕ Caffeine Prescription
+          ## ☕ Caffeine Prescription
 
-**Recommended:** ${data.caffeineMg}mg total
-- Base need: ${data.caffeineMgBreakdown.base}mg
-- From code output: +${data.caffeineMgBreakdown.locBonus}mg
-- Burnout risk: +${data.caffeineMgBreakdown.burnoutRisk}mg
+          **Recommended:** ${data.caffeineMg}mg total
+          - Base need: ${data.caffeineMgBreakdown.base}mg
+          - From code output: +${data.caffeineMgBreakdown.locBonus}mg
+          - Burnout risk: +${data.caffeineMgBreakdown.burnoutRisk}mg
 
-### 💊 Product Recommendation${data.recommendations.length === 1 ? '' : 's'}
+          ### 💊 Product Recommendation${data.recommendations.length === 1 ? '' : 's'}
 
-${data.recommendations.length === 0 ? '**No caffeine needed!** Go drink water and take a walk.' : 
-  data.recommendations.map((r, i) => `
-**Option ${i + 1}:** ${r.emoji} ${r.product.replace(/_/g, ' ').toUpperCase()}
-- ${r.servings} × ${r.serving}
-- ${r.totalMg}mg caffeine | ${r.cost}`).join('\n\n')}
+          ${data.recommendations.length === 0 ? '**No caffeine needed!** Go drink water and take a walk.' : 
+            data.recommendations.map((r, i) => `
+          **Option ${i + 1}:** ${r.emoji} ${r.product.replace(/_/g, ' ').toUpperCase()}
+          - ${r.servings} × ${r.serving}
+          - ${r.totalMg}mg caffeine | ${r.cost}`).join('\n\n')}
 
----
+          ---
 
-${data.energy < 30 ? 
-  '### 🚨 YOU NEED SLEEP\nSeriously, caffeine won\'t help. Get 8 hours of rest.' :
-  data.energy < 50 ?
-  '### 😴 Take a Nap First\nConsider a 20-minute nap before the caffeine.' :
-  data.energy < 70 ?
-  '### ✅ Moderate Boost\nCaffeine + walk + water will keep you productive.' :
-  '### 🔥 Already Strong\nLight caffeine optional. Stay hydrated.'}
+          ${data.energy < 30 ? 
+            '### 🚨 YOU NEED SLEEP\nSeriously, caffeine won\'t help. Get 8 hours of rest.' :
+            data.energy < 50 ?
+            '### 😴 Take a Nap First\nConsider a 20-minute nap before the caffeine.' :
+            data.energy < 70 ?
+            '### ✅ Moderate Boost\nCaffeine + walk + water will keep you productive.' :
+            '### 🔥 Already Strong\nLight caffeine optional. Stay hydrated.'}
 
-${data.commits7d > 70 ? '\n**⚠️ Burnout Alert:** You\'ve averaged ' + Math.round(data.commits7d / 7) + ' commits/day. Consider slowing down!' : ''}
+          ${data.commits7d > 70 ? '\n**⚠️ Burnout Alert:** You have averaged ' + Math.round(data.commits7d / 7) + ' commits/day. Consider slowing down!' : ''}
 
----
+          ---
 
-**Generated:** ${new Date().toLocaleString()}
-`;
+          **Generated:** ${new Date().toLocaleString()}
+          `).trim();
 
           // Execute gh cli
           fs.writeFileSync('caffeine-report.md', markdown);
