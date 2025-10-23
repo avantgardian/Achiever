@@ -286,7 +286,7 @@ jobs:
               width += (char.charCodeAt(0) > 127) ? 2 : 1;
             }
             const padding = Math.max(0, 59 - width);
-            return '║ ' + content + ' '.repeat(padding);
+            return content + ' '.repeat(padding);
           }
           
           console.log('\n');
@@ -311,7 +311,6 @@ jobs:
           console.log(padLine(`  Lines Changed (24h)${' '.repeat(7)}${data.locToday}`));
           console.log(padLine(`  Lines Changed (7d)${' '.repeat(8)}${data.locWeek}`));
           console.log(padLine(`  Avg Lines/Commit${' '.repeat(10)}${data.locToday > 0 ? Math.round(data.locToday / Math.max(data.commits24h, 1)) : 0}`));
-          console.log('╚════════════════════════════════════════════════════════════╝');
           console.log('');
           
           // Caffeine Prescription
@@ -322,7 +321,6 @@ jobs:
           console.log(padLine(`    • Base need:${' '.repeat(20)}${data.caffeineMgBreakdown.base}mg`));
           console.log(padLine(`    • Code output bonus:${' '.repeat(12)}+${data.caffeineMgBreakdown.locBonus}mg`));
           console.log(padLine(`    • Burnout risk factor:${' '.repeat(10)}+${data.caffeineMgBreakdown.burnoutRisk}mg`));
-          console.log('╚════════════════════════════════════════════════════════════╝');
           console.log('');
           
           // Recommendations
@@ -338,7 +336,6 @@ jobs:
               console.log(padLine(`     Caffeine: ${r.totalMg}mg | Cost: ${r.cost}`));
             });
           }
-          console.log('╚════════════════════════════════════════════════════════════╝');
           console.log('');
           EOF
           
