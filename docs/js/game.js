@@ -103,7 +103,7 @@ function renderAchievements(achievements) {
         `;
         allAchievementCards += cardHTML;
     });
-    achievementsGrid.innerHTML += allAchievementCards;
+    achievementsGrid.innerHTML = allAchievementCards;
 }
 
 function updateProgressBar(achievements) {
