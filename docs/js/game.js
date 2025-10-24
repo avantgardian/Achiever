@@ -10,8 +10,11 @@ async function fetchGameData() {
         const game = await response.json();
 
         const achievements = await fetchAchievements(gameId);
+        const guides = await fetchGuides(gameId);
+
         renderGameHeader(game);
         renderAchievements(achievements);
+        renderGuides(guides);
         updateProgressBar(achievements);
     } catch (error) {
         console.error('Error loading game:', error);
@@ -22,6 +25,12 @@ async function fetchGameData() {
 
 async function fetchAchievements(gameId) {
     const response = await fetch(`${window.API_URL}/api/games/${gameId}/achievements`);
+
+    return await response.json();
+}
+
+async function fetchGuides(gameId) {
+    const response = await fetch(`${window.API_URL}/api/games/${gameId}/guides`);
 
     return await response.json();
 }
@@ -109,6 +118,55 @@ function updateProgressBar(achievements) {
     document.querySelector('.progress-text').textContent = `${completed} / ${total} Unlocked`;
     const progressBar = document.querySelector('.progress-bar-fill');
     progressBar.style.width = percentage +'%';
+}
+
+function renderGuides(guides) {
+    const guidesGrid = document.querySelector('.guides-grid');
+    let allGuidesCards = '';
+
+    if (!guides || guides.length === 0) {
+        guidesGrid.innerHTML = '<p class="text-center loading-text">No guides found.</p>';
+        return;
+    }
+
+    guides.forEach(guide => {
+        const cardHTML = `
+            <div class="guide-card">
+                    <div class="guide-header">
+                        <div class="guide-icon">
+                            <i class="bi ${guide.icon}"></i>
+                        </div>
+                        <div class="guide-meta">
+                            <span class="guide-badge">${guide.category}</span>
+                            <span class="guide-difficulty ${guide.difficulty.toLowerCase()}">${guide.difficulty}</span>
+                        </div>
+                    </div>
+                    <div class="guide-content">
+                        <h3 class="guide-title">${guide.title}</h3>
+                        <p class="guide-description">${guide.description}</p>
+                        <div class="guide-stats">
+                            <div class="guide-stat">
+                                <i class="bi bi-trophy"></i>
+                                <span>${guide._count.guideAchievements} Achievements</span>
+                            </div>
+                            <div class="guide-stat">
+                                <i class="bi bi-clock"></i>
+                                <span>${guide.estimatedTime}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="guide-footer">
+                        <button class="guide-btn">
+                            View Guide
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+        `;
+        allGuidesCards += cardHTML;
+    });
+
+    guidesGrid.innerHTML = allGuidesCards;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
