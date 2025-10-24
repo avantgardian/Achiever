@@ -122,16 +122,26 @@ function updateProgressBar(achievements) {
 
 function renderGuides(guides) {
     const guidesGrid = document.querySelector('.guides-grid');
-    let allGuidesCards = '';
+    
+    // Remove all skeleton cards
+    const skeletonCards = document.querySelectorAll('.skeleton-card');
+    skeletonCards.forEach(card => card.remove());
+
+    // Update guides count
+    const guidesCount = document.querySelector('.count-text');
+    guidesCount.textContent = `${guides.length} Guides Available`;
+    guidesCount.classList.remove('skeleton');
 
     if (!guides || guides.length === 0) {
         guidesGrid.innerHTML = '<p class="text-center loading-text">No guides found.</p>';
         return;
     }
 
+    let allGuidesCards = '';
+
     guides.forEach(guide => {
         const cardHTML = `
-            <div class="guide-card">
+            <div class="guide-card" onclick="window.location.href='guide.html?id=${guide.id}'">
                     <div class="guide-header">
                         <div class="guide-icon">
                             <i class="bi ${guide.icon}"></i>
