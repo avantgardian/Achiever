@@ -85,6 +85,56 @@ app.get('/api/achievements/:id', async (req, res) => {
     }
 });
 
+// Get all guides for a specific game
+app.get('/api/games/:gameId/guides', async (req, res) => {
+    try {
+        const gameId = parseInt(req.params.gameId);
+        
+        const guides = await prisma.guide.findMany({
+            where: { 
+                gameId,
+                published: true 
+            },
+            include: {
+                _count: {
+                    select: {
+                        guideAchievements: true
+                    }
+                }
+            }
+        });
+        
+        res.json(guides);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch guides' });
+    }
+});
+
+app.get('/api/guides/:guideId', async (req, res) => {
+    try {
+        const guideId = parseInt(req.params.guideId);
+
+        const guide = await prisma.guide.findUnique({
+            where: {
+                id: guideId,
+                published: true
+            },
+            include: {
+                game: true,
+                guideAchievements: {
+                    include: {
+                        achievement: true
+                    }
+                }
+            }
+        });
+
+        res.json(guide);
+    } catch {
+        res.status(500).json({ error: 'Failed to fetch guide' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
