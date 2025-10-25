@@ -70,7 +70,10 @@ async function seedGuides() {
     try {
         for (const guide of guides) {
             const existingGuide = await prisma.guide.findFirst({
-                where: { title: guide.title }
+                where: { 
+                    title: guide.title,
+                    gameId: guide.gameId 
+                }
             });
 
             if (existingGuide) {
@@ -87,7 +90,5 @@ async function seedGuides() {
         console.error('Error seeding guides:', error);
     }
 }
-
-
 
 seedGuides();
