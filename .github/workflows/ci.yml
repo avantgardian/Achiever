@@ -8,56 +8,9 @@ on:
     branches: [ main ]
 
 jobs:
-  setup:
-    name: Setup Dependencies
-    runs-on: ubuntu-latest
-    
-    # Set up PostgreSQL service for backend
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: testpassword
-          POSTGRES_DB: achiever_test
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-    
-    # Environment variables for the job
-    env:
-      DATABASE_URL: postgresql://testuser:testpassword@localhost:5432/achiever_test
-    
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install root dependencies
-        run: npm ci
-
-      - name: Install backend dependencies
-        run: cd achiever-api && npm ci
-
-      - name: Run database migrations
-        run: cd achiever-api && npx prisma migrate deploy
-
-      - name: Seed test database
-        run: cd achiever-api && node seed-test-data.js
-
   linter:
     name: Run Linter
     runs-on: ubuntu-latest
-    needs: setup
     
     steps:
       - name: Checkout code
@@ -81,7 +34,6 @@ jobs:
   unit-tests:
     name: Run Unit Tests
     runs-on: ubuntu-latest
-    needs: setup
     
     # Set up PostgreSQL service for backend
     services:
@@ -131,7 +83,6 @@ jobs:
   e2e-tests:
     name: Run E2E Tests
     runs-on: ubuntu-latest
-    needs: setup
     
     # Set up PostgreSQL service for backend
     services:
