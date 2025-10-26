@@ -11,7 +11,8 @@ const GAMES_TO_SEED = [
     1190000,  // Car Mechanic Simulator 21
     2487150,  // Deconstructor Simulator
     2201940,  // Ship Graveyard Simulator 2
-    2321470  // Deep Rock Galactic Survivors
+    2321470,  // Deep Rock Galactic Survivors
+    2464280  // Tormented Souls 2
 ];
 
 async function seedAchievements() {

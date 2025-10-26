@@ -9,7 +9,8 @@ const GAMES_TO_SEED = [
     { name: 'Car Mechanic Simulator 21', steamAppId: 1190000 },
     { name: 'Deconstructor Simulator', steamAppId: 2487150 },
     { name: 'Ship Graveyard Simulator 2', steamAppId: 2201940 },
-    { name: 'Deep Rock Galactic Sutvivors', steamAppId: 2321470 }
+    { name: 'Deep Rock Galactic Sutvivors', steamAppId: 2321470 },
+    { name: 'Tormented Souls 2', steamAppId: 2464280 }
 ]
 
 async function seedGames() {
