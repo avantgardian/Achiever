@@ -12,7 +12,8 @@ const GAMES_TO_SEED = [
     2487150,  // Deconstructor Simulator
     2201940,  // Ship Graveyard Simulator 2
     2321470,  // Deep Rock Galactic Survivors
-    2464280  // Tormented Souls 2
+    2464280,  // Tormented Souls 2
+    1174180   // Red Dead Redemption 2
 ];
 
 async function seedAchievements() {
