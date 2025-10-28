@@ -20,4 +20,12 @@ test.describe('Game Detail Page', () => {
         await expect(firstAchievement.locator('.achievement-desc')).toBeVisible();
         await expect(firstAchievement.locator('img')).toHaveAttribute('src', /.+/);
     });
+
+    test('guides data displays', async ({ page }) => {
+        const firstGuide = page.locator('.guide-card').first();
+        
+        await expect(firstGuide.locator('.guide-title')).toBeVisible();
+        await expect(firstGuide.locator('.guide-description')).toBeVisible();
+        await expect(firstGuide.locator('.guide-stats')).toBeVisible();
+    });
 });
