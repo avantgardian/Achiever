@@ -126,14 +126,6 @@ body {
     text-transform: uppercase;
 }
 
-.hero-description {
-    font-size: clamp(1rem, 2vw, 1.125rem);
-    line-height: 1.8;
-    color: var(--text-secondary);
-    max-width: 700px;
-    margin: 0 auto 3rem;
-    font-weight: 400;
-}
 
 /* ========================================
    SEARCH BAR

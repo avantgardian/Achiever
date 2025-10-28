@@ -14,7 +14,17 @@
     "test:unit:ui": "vitest --ui",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed"
+    "test:e2e:headed": "playwright test --headed",
+    "build:css": "cleancss -o docs/css/style.min.css docs/css/style.css && cleancss -o docs/css/game.min.css docs/css/game.css && cleancss -o docs/css/guide.min.css docs/css/guide.css",
+    "build:css:watch": "npm run build:css && echo 'CSS minified. Run again after making changes.'",
+    "build:css:dev": "nodemon --watch docs/css --ext css --exec 'npm run build:css'",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "docs/css/*.css": [
+      "npm run build:css",
+      "git add docs/css/*.min.css"
+    ]
   },
   "repository": {
     "type": "git",
@@ -33,9 +43,13 @@
     "@eslint/json": "^0.13.2",
     "@playwright/test": "^1.56.0",
     "@types/node": "^24.7.0",
+    "clean-css-cli": "^5.6.3",
     "eslint": "^9.38.0",
     "globals": "^16.4.0",
     "http-server": "^14.1.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
+    "nodemon": "^3.1.10",
     "typescript-eslint": "^8.46.1",
     "vitest": "^3.2.4"
   }
