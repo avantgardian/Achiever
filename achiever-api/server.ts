@@ -46,7 +46,7 @@ app.get('/api/games/:gameId', async (req: Request, res: Response) => {
         })
 
         res.json(game);
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: 'Failed to fetch game' });
     }
 });
@@ -69,7 +69,7 @@ app.get('/api/games/:gameId/achievements', async (req: Request, res: Response) =
         });
         
         res.json(achievements);
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: 'Failed to fetch achievements' });
     }
 });
@@ -88,7 +88,7 @@ app.get('/api/achievements/:id', async (req: Request, res: Response) => {
         });
 
         res.json(achievement);
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: 'Failed to fetch achievements' });
     }
 });
@@ -116,7 +116,7 @@ app.get('/api/games/:gameId/guides', async (req: Request, res: Response) => {
         });
         
         res.json(guides);
-    } catch (error) {
+    } catch {
         res.status(500).json({ error: 'Failed to fetch guides' });
     }
 });
