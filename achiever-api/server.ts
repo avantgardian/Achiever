@@ -1,18 +1,17 @@
-const express = require('express');
-const cors = require('cors');
-const { PrismaClient } = require('@prisma/client');
-require('dotenv').config();
+import express, { Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
+import cors from 'cors';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const prisma = new PrismaClient();
-
-// Middleware
 app.use(cors());
 app.use(express.json());
 
+const prisma = new PrismaClient();
+
 // Routes
-app.get('/api/games', async (req, res) => {
+app.get('/api/games', async (req: Request, res: Response) => {
     const gameList = await prisma.game.findMany({
         where: { published: true },
         include: {
@@ -27,9 +26,12 @@ app.get('/api/games', async (req, res) => {
     res.json(gameList);
 });
 
-app.get('/api/games/:gameId', async (req, res) => {
+app.get('/api/games/:gameId', async (req: Request, res: Response) => {
     try {
-        const gameId = parseInt(req.params.gameId);
+        const gameId = Number(req.params.gameId);
+        if (!Number.isInteger(gameId)) {
+            return res.status(400).json({ error: 'gameId must be an integer' });
+        }
 
         const game = await prisma.game.findUnique({
             where: { id: gameId },
@@ -49,14 +51,17 @@ app.get('/api/games/:gameId', async (req, res) => {
     }
 });
 
-app.get('/api/guides', (req, res) => {
+app.get('/api/guides', (req: Request, res: Response) => {
     res.send({'message': 'Guides API is running'});
 });
 
 // Get all achievements for a specific game
-app.get('/api/games/:gameId/achievements', async (req, res) => {
+app.get('/api/games/:gameId/achievements', async (req: Request, res: Response) => {
     try {
-        const gameId = parseInt(req.params.gameId);
+        const gameId = Number(req.params.gameId);
+        if (!Number.isInteger(gameId)) {
+            return res.status(400).json({ error: 'gameId must be an integer' });
+        }
         
         const achievements = await prisma.achievement.findMany({
             where: { gameId },
@@ -70,9 +75,12 @@ app.get('/api/games/:gameId/achievements', async (req, res) => {
 });
 
 // Test with Game info
-app.get('/api/achievements/:id', async (req, res) => {
+app.get('/api/achievements/:id', async (req: Request, res: Response) => {
     try {
-        const id = parseInt(req.params.id);
+        const id = Number(req.params.id);
+        if (!Number.isInteger(id)) {
+            return res.status(400).json({ error: 'id must be an integer' });
+        }
 
         const achievement = await prisma.achievement.findUnique({
             where: { id },
@@ -86,9 +94,12 @@ app.get('/api/achievements/:id', async (req, res) => {
 });
 
 // Get all guides for a specific game
-app.get('/api/games/:gameId/guides', async (req, res) => {
+app.get('/api/games/:gameId/guides', async (req: Request, res: Response) => {
     try {
-        const gameId = parseInt(req.params.gameId);
+        const gameId = Number(req.params.gameId);
+        if (!Number.isInteger(gameId)) {
+            return res.status(400).json({ error: 'gameId must be an integer' });
+        }
         
         const guides = await prisma.guide.findMany({
             where: { 
@@ -110,9 +121,12 @@ app.get('/api/games/:gameId/guides', async (req, res) => {
     }
 });
 
-app.get('/api/guides/:guideId', async (req, res) => {
+app.get('/api/guides/:guideId', async (req: Request, res: Response) => {
     try {
-        const guideId = parseInt(req.params.guideId);
+        const guideId = Number(req.params.guideId);
+        if (!Number.isInteger(guideId)) {
+            return res.status(400).json({ error: 'guideId must be an integer' });
+        }
 
         const guide = await prisma.guide.findUnique({
             where: {
@@ -135,8 +149,7 @@ app.get('/api/guides/:guideId', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+app.get('/health', (req: Request, res: Response) => res.json({ status: 'ok' }));
 
-// Start the server
+const port = process.env.PORT ? Number(process.env.PORT) : 3000;
+app.listen(port, () => console.log(`Listening on ${port}`));
