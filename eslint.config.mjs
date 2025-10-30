@@ -10,6 +10,7 @@ export default defineConfig([
         ignores: [
             "**/node_modules/**",
             "**/achiever-api/generated/**",
+            "**/achiever-api/dist/**",
             "**/playwright-report/**",
             "**/test-results/**",
             "**/.git/**",
