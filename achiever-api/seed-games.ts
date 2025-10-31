@@ -1,7 +1,23 @@
-const { PrismaClient } = require('@prisma/client');
-require('dotenv').config();
+import { PrismaClient } from '@prisma/client';
+import 'dotenv/config';
+import type { Game } from '@prisma/client';
 
 const prisma = new PrismaClient();
+
+interface SteamGameData {
+    [appId: string]: {
+        data: {
+            name: string;
+            short_description: string;
+            header_image: string;
+            steam_appid: number;
+            release_date: {
+                coming_soon: boolean;
+                date: string;
+            };
+        };
+    };
+}
 
 const GAMES_TO_SEED = [
     { name: 'Snowrunner', steamAppId: 1465360 },
@@ -31,9 +47,7 @@ async function seedGames() {
 
         const storeUrl = `https://store.steampowered.com/api/appdetails?appids=${item.steamAppId}`;
         const storeResponse = await fetch(storeUrl);
-        const storeData = await storeResponse.json();
-
-        //console.log('Steam data:', storeData);
+        const storeData: SteamGameData = await storeResponse.json();
 
         const gameInfo = storeData[item.steamAppId].data;
 
