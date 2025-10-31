@@ -94,8 +94,11 @@ jobs:
       - name: Run database migrations
         run: cd achiever-api && npx prisma migrate deploy
 
+      - name: Build TypeScript
+        run: cd achiever-api && npm run build
+
       - name: Seed test database
-        run: cd achiever-api && node seed-test-data.js
+        run: cd achiever-api && node dist/seed-test-data.js
 
       - name: Install Playwright browsers
         run: npx playwright install chromium firefox --with-deps
