@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import 'dotenv/config';
-import type { Game } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -75,3 +74,5 @@ async function seedGames() {
 }
 
 seedGames();
+
+export {};

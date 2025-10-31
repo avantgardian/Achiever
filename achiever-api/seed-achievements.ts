@@ -1,7 +1,20 @@
-const { PrismaClient } = require('@prisma/client');
-require('dotenv').config();
+import { PrismaClient } from '@prisma/client';
+import 'dotenv/config';
 
 const prisma = new PrismaClient();
+
+interface SteamSchemaResponse {
+    game: {
+        availableGameStats?: {
+            achievements?: Array<{
+                name: string;
+                displayName: string;
+                description: string;
+                icon: string;
+            }>;
+        };
+    };
+}
 
 // List of Steam App IDs to seed achievements for
 const GAMES_TO_SEED = [
@@ -41,7 +54,7 @@ async function seedAchievements() {
             const url = `https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?appid=${steamAppId}&key=${apiKey}`;
 
             const response = await fetch(url);
-            const data = await response.json();
+            const data: SteamSchemaResponse = await response.json();
 
             // Check if game has achievements
             if (!data.game?.availableGameStats?.achievements) {
@@ -89,7 +102,7 @@ async function seedAchievements() {
             console.log(`✅ ${game.name}: ${insertedCount} inserted, ${skippedCount} skipped\n`);
 
         } catch (error) {
-            console.error(`❌ Error processing Steam App ID ${steamAppId}:`, error.message);
+            console.error(`❌ Error processing Steam App ID ${steamAppId}:`, error);
             console.log(''); // Empty line for readability
         }
     }
@@ -100,4 +113,6 @@ async function seedAchievements() {
 
 // Run the seed function
 seedAchievements();
+
+export {};
 
