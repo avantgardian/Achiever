@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-require('dotenv').config();
+import { PrismaClient, Difficulty } from '@prisma/client';
+import 'dotenv/config';
 
 const prisma = new PrismaClient();
 
@@ -8,7 +8,7 @@ const guides = [
         gameId: 1, // Year Walk
         title: "Story Walkthrough",
         description: "Complete the main story and unlock all story-related achievements. Perfect for first-time players.",
-        difficulty: "EASY",
+        difficulty: "EASY" as Difficulty,
         estimatedTime: "2-3 hours",
         category: "Main Story",
         icon: "bi-lightning-charge-fill",
@@ -28,7 +28,7 @@ const guides = [
         gameId: 1, // Year Walk
         title: "New Game+",
         description: "Master the game with advanced techniques and unlock hidden achievements.",
-        difficulty: "MEDIUM",
+        difficulty: "MEDIUM" as Difficulty,
         estimatedTime: "2 hours",
         category: "Advanced",
         icon: "bi-star-fill",
@@ -48,7 +48,7 @@ const guides = [
         gameId: 1, // Year Walk
         title: "100% Completion",
         description: "Unlock every achievement in the game. Includes collectibles, hidden secrets, and challenge achievements.",
-        difficulty: "HARD",
+        difficulty: "HARD" as Difficulty,
         estimatedTime: "4-5 hours",
         category: "100%",
         icon: "bi-gem",
