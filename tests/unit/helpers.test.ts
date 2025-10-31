@@ -15,7 +15,7 @@ describe('calculateProgress', () => {
         expect(calculateProgress(1, 3)).toBe(33);
     })
 
-    it('should cap at 100% when completed exceeds total', () =>{
+    it('should cap at 100% when completed exceeds total', () => {
         expect(calculateProgress(15, 10)).toBe(100);
     })
 });

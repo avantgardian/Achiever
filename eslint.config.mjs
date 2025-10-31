@@ -14,7 +14,8 @@ export default defineConfig([
             "**/playwright-report/**",
             "**/test-results/**",
             "**/.git/**",
-            "**/package-lock.json"             // Auto-generated, don't lint
+            "**/package-lock.json",            // Auto-generated, don't lint
+            "**/tsconfig.json"                 // TypeScript config files
         ]
     },
 
