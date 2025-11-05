@@ -2,7 +2,6 @@ import { test, expect, Page } from '@playwright/test';
 
 test.describe.serial('Views Basics', () => {
     test.beforeEach( async ({page, context}) => {
-        await context.clearCookies();
         await page.goto('/');
         await page.evaluate(() => sessionStorage.clear());
     })
