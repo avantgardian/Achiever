@@ -27,6 +27,7 @@ model Game {
   releaseDate   DateTime?
   imageUrl      String?
   published     Boolean  @default(false)
+  views         Int @default(0)
   guides        Guide[]
   achievements  Achievement[]
   createdAt     DateTime @default(now())
@@ -46,6 +47,7 @@ model Guide {
   icon              String?
   sections          Json?
   published         Boolean  @default(false)
+  views             Int @default(0)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 }

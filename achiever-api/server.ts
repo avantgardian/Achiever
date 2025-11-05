@@ -10,7 +10,6 @@ app.use(express.json());
 
 const prisma = new PrismaClient();
 
-// Routes
 app.get('/api/games', async (req: Request, res: Response) => {
     const gameList = await prisma.game.findMany({
         where: { published: true },
@@ -24,6 +23,27 @@ app.get('/api/games', async (req: Request, res: Response) => {
         }
     });
     res.json(gameList);
+});
+
+app.post('/api/games/:gameId/view', async (req: Request, res: Response) => {
+    try {
+        const gameId = Number(req.params.gameId);
+        if (!Number.isInteger(gameId)) {
+            return res.status(400).json({ error: 'gameId must be an integer' });
+        }
+        const game = await prisma.game.update({
+            where: { id: gameId },
+            data: {
+                views: {
+                    increment: 1
+                }
+            }
+        });
+
+        res.json(game);
+    } catch {
+        res.status(500).json({ error: 'Unable to access data' });
+    }
 });
 
 app.get('/api/games/:gameId', async (req: Request, res: Response) => {
@@ -118,6 +138,27 @@ app.get('/api/games/:gameId/guides', async (req: Request, res: Response) => {
         res.json(guides);
     } catch {
         res.status(500).json({ error: 'Failed to fetch guides' });
+    }
+});
+
+app.post('/api/guides/:guideId/view', async (req: Request, res: Response) => {
+    try {
+        const guideId = Number(req.params.guideId);
+        if (!Number.isInteger(guideId)) {
+            return res.status(400).json({ error: 'guideId must be an integer' });
+        }
+        const guide = await prisma.guide.update({
+            where: { id: guideId },
+            data: {
+                views: {
+                    increment: 1
+                }
+            }
+        });
+
+        res.json(guide);
+    } catch {
+        res.status(500).json({ error: 'Unable to access data' });
     }
 });
 
