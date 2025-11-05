@@ -36,7 +36,7 @@ function renderGames(games) {
                                 <i class="bi bi-book-fill"></i> ${game._count.guides}
                             </span>
                             <span class="stat-item" data-bs-toggle="tooltip" title="Number of Views">
-                                <i class="bi bi-eye-fill"></i> 0
+                                <i class="bi bi-eye-fill"></i> ${game.views}
                             </span>
                         </div>
                     </div>

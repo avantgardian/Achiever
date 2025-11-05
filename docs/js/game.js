@@ -1,11 +1,8 @@
 // Game Detail Page JavaScript
 import { calculateProgress } from "./helpers.js";
 
-async function fetchGameData() {
+async function fetchGameData(gameId) {
     try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const gameId = urlParams.get('id');
-
         const response = await fetch(`${window.API_URL}/api/games/${gameId}`);
         const game = await response.json();
 
@@ -179,6 +176,22 @@ function renderGuides(guides) {
     guidesGrid.innerHTML = allGuidesCards;
 }
 
+async function incrementGameViews(gameId) {
+    // 4. Make POST request to your API endpoint
+    // 5. After successful response, save to sessionStorage
+    const alreadyViewed = sessionStorage.getItem(`viewed_game_${gameId}`);
+    if (alreadyViewed) {
+        return;
+    }
+
+    await fetch(`${window.API_URL}/api/games/${gameId}/view`, { method: 'POST' });
+    sessionStorage.setItem(`viewed_game_${gameId}`, 'true');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    fetchGameData();
+    const urlParams = new URLSearchParams(window.location.search);
+    const gameId = urlParams.get('id');
+
+    incrementGameViews(gameId);
+    fetchGameData(gameId);
 })
