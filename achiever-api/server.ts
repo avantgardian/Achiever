@@ -20,7 +20,8 @@ app.get('/api/games', async (req: Request, res: Response) => {
                     guides: true
                 }
             }
-        }
+        },
+        orderBy: { id: 'asc' }
     });
     res.json(gameList);
 });
