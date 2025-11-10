@@ -60,13 +60,13 @@ function initializeTooltips() {
     });
 }
 
-function filterGames(searchQuery) {
+export function filterGames(searchQuery, games) {
     if (!searchQuery) {
-        return allGames;
+        return games;
     }
     const query = searchQuery.toLowerCase();
 
-    return allGames.filter(game => game.name.toLowerCase().includes(query));
+    return games.filter(game => game.name.toLowerCase().includes(query));
 }
 
 async function fetchGames() {
@@ -77,16 +77,18 @@ async function fetchGames() {
     renderGames(games);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('We loaded in this!');
-    fetchGames();
-    
-    const searchInput = document.getElementById('gameSearch');
-    searchInput.addEventListener('input', (event) => {
-        clearTimeout(searchTimeout);
+if (typeof document !== 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        console.log('We loaded in this!');
+        fetchGames();
+        
+        const searchInput = document.getElementById('gameSearch');
+        searchInput.addEventListener('input', (event) => {
+            clearTimeout(searchTimeout);
 
-        searchTimeout = setTimeout(() => {
-            renderGames(filterGames(event.target.value));
-        }, 300);
-    });
-})
+            searchTimeout = setTimeout(() => {
+                renderGames(filterGames(event.target.value, allGames));
+            }, 300);
+        });
+    })
+}
