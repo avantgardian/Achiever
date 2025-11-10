@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
 import { filterGames } from '../../docs/js/app.js';
-import { mock } from 'node:test';
 
 describe('filterGames', () => {
     const mockGames = [{name: 'Year Walk'}, {name: 'SnowRunner'}];
