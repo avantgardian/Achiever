@@ -313,6 +313,8 @@ jobs:
             const item = caffeinProducts[randomProduct];
             
             const servings = Math.ceil(caffeineMg / item.mg);
+            const unitCost = parseFloat(item.cost.replace('$', ''));
+            const totalCost = (unitCost * servings).toFixed(2);
             
             return [{
               product: randomProduct,
@@ -320,7 +322,7 @@ jobs:
               totalMg: servings * item.mg,
               serving: item.serving,
               emoji: item.emoji,
-              cost: item.cost
+              cost: `$${totalCost}`
             }];
           }
 
