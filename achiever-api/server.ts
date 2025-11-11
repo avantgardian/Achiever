@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { validateId } from './helpers';
 dotenv.config();
 
 const app = express();
@@ -28,8 +29,8 @@ app.get('/api/games', async (req: Request, res: Response) => {
 
 app.post('/api/games/:gameId/view', async (req: Request, res: Response) => {
     try {
-        const gameId = Number(req.params.gameId);
-        if (!Number.isInteger(gameId)) {
+        const gameId = validateId(req.params.gameId);
+        if (gameId === null) {
             return res.status(400).json({ error: 'gameId must be an integer' });
         }
         const game = await prisma.game.update({
@@ -49,8 +50,8 @@ app.post('/api/games/:gameId/view', async (req: Request, res: Response) => {
 
 app.get('/api/games/:gameId', async (req: Request, res: Response) => {
     try {
-        const gameId = Number(req.params.gameId);
-        if (!Number.isInteger(gameId)) {
+        const gameId = validateId(req.params.gameId);
+        if (gameId === null) {
             return res.status(400).json({ error: 'gameId must be an integer' });
         }
 
@@ -79,8 +80,8 @@ app.get('/api/guides', (req: Request, res: Response) => {
 // Get all achievements for a specific game
 app.get('/api/games/:gameId/achievements', async (req: Request, res: Response) => {
     try {
-        const gameId = Number(req.params.gameId);
-        if (!Number.isInteger(gameId)) {
+        const gameId = validateId(req.params.gameId);
+        if (gameId === null) {
             return res.status(400).json({ error: 'gameId must be an integer' });
         }
         
@@ -98,8 +99,8 @@ app.get('/api/games/:gameId/achievements', async (req: Request, res: Response) =
 // Test with Game info
 app.get('/api/achievements/:id', async (req: Request, res: Response) => {
     try {
-        const id = Number(req.params.id);
-        if (!Number.isInteger(id)) {
+        const id = validateId(req.params.id);
+        if (id === null) {
             return res.status(400).json({ error: 'id must be an integer' });
         }
 
@@ -117,8 +118,8 @@ app.get('/api/achievements/:id', async (req: Request, res: Response) => {
 // Get all guides for a specific game
 app.get('/api/games/:gameId/guides', async (req: Request, res: Response) => {
     try {
-        const gameId = Number(req.params.gameId);
-        if (!Number.isInteger(gameId)) {
+        const gameId = validateId(req.params.gameId);
+        if (gameId === null) {
             return res.status(400).json({ error: 'gameId must be an integer' });
         }
         
@@ -144,8 +145,8 @@ app.get('/api/games/:gameId/guides', async (req: Request, res: Response) => {
 
 app.post('/api/guides/:guideId/view', async (req: Request, res: Response) => {
     try {
-        const guideId = Number(req.params.guideId);
-        if (!Number.isInteger(guideId)) {
+        const guideId = validateId(req.params.guideId);
+        if (guideId === null) {
             return res.status(400).json({ error: 'guideId must be an integer' });
         }
         const guide = await prisma.guide.update({
@@ -165,8 +166,8 @@ app.post('/api/guides/:guideId/view', async (req: Request, res: Response) => {
 
 app.get('/api/guides/:guideId', async (req: Request, res: Response) => {
     try {
-        const guideId = Number(req.params.guideId);
-        if (!Number.isInteger(guideId)) {
+        const guideId = validateId(req.params.guideId);
+        if (guideId === null) {
             return res.status(400).json({ error: 'guideId must be an integer' });
         }
 

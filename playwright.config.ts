@@ -77,7 +77,7 @@ export default defineConfig({
     /* Run your local dev server before starting the tests */
     webServer: [
         {
-            command: 'cd achiever-api && npm run dev',
+            command: 'cd achiever-api && npm run build && npm start',
             url: 'http://localhost:3000/api/games',
             reuseExistingServer: !process.env.CI,
             timeout: 120 * 1000,
