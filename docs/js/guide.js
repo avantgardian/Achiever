@@ -49,7 +49,7 @@ function renderGuideHero(guide) {
     const metaStats = document.querySelectorAll('.meta-stat span');
     metaStats[0].textContent = guide.estimatedTime;
     metaStats[0].classList.remove('skeleton-text');
-    metaStats[1].textContent = guide._count.guideAchievements + ' Achievements';
+    metaStats[1].textContent = guide.guideAchievements.length + ' Achievements';
     metaStats[1].classList.remove('skeleton-text');
 
     const difficultyBadge = document.querySelector('.meta-stat.difficulty');
