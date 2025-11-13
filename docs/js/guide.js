@@ -1,8 +1,8 @@
-function createAchievementMap(guideAchievements) {
+function createAchievementMap(achievements) {
     const achievementMap = {};
     
-    for (const item of guideAchievements) {
-        achievementMap[item.achievementId] = item.achievement;
+    for (const achievement of achievements) {
+        achievementMap[achievement.id] = achievement;
     }
 
     return achievementMap;
@@ -14,8 +14,12 @@ async function fetchGuideData(guideId) {
         const response = await fetch(`${window.API_URL}/api/guides/${guideId}`);
         const guide = await response.json();
 
-        renderGuideHero(guide);
-        renderGuideSections(guide.sections, guide.guideAchievements);
+        // Fetch all achievements for this game
+        const achievementsResponse = await fetch(`${window.API_URL}/api/games/${guide.gameId}/achievements`);
+        const achievements = await achievementsResponse.json();
+
+        renderGuideHero(guide, achievements);
+        renderGuideSections(guide.sections, achievements);
     } catch (error) {
         console.error('Error loading guide:', error);
         const grid = document.querySelector('.guide-title-section');
@@ -23,7 +27,7 @@ async function fetchGuideData(guideId) {
     }
 }
 
-function renderGuideHero(guide) {
+function renderGuideHero(guide, achievements) {
     document.title = guide.title + ' - ' + guide.game.name + ' - Achiever';
 
     // Update back button to correct game page
@@ -46,10 +50,20 @@ function renderGuideHero(guide) {
     description.textContent = guide.description;
     description.classList.remove('skeleton-text');
 
+    // Count achievement blocks in sections to show how many this guide covers
+    let achievementCount = 0;
+    if (guide.sections) {
+        guide.sections.forEach(section => {
+            if (section.blocks) {
+                achievementCount += section.blocks.filter(b => b.type === 'achievement').length;
+            }
+        });
+    }
+
     const metaStats = document.querySelectorAll('.meta-stat span');
     metaStats[0].textContent = guide.estimatedTime;
     metaStats[0].classList.remove('skeleton-text');
-    metaStats[1].textContent = guide.guideAchievements.length + ' Achievements';
+    metaStats[1].textContent = achievementCount + ' Achievements';
     metaStats[1].classList.remove('skeleton-text');
 
     const difficultyBadge = document.querySelector('.meta-stat.difficulty');
@@ -60,8 +74,8 @@ function renderGuideHero(guide) {
     difficultySpan.classList.remove('skeleton-text');
 }
 
-function renderGuideSections(sections, guideAchievements) {
-    const achievementMap = createAchievementMap(guideAchievements);
+function renderGuideSections(sections, achievements) {
+    const achievementMap = createAchievementMap(achievements);
     const guideTree = document.querySelector('.guide-tree');
 
     let allSectionsHTML = ''
