@@ -15,11 +15,189 @@ const guides = [
         published: true,
         sections: [
             {
+                id: "getting-started",
                 title: "Getting Started",
-                steps: [
-                    "Start a new game",
-                    "Follow the main path",
-                    "Complete Chapter 1"
+                description: "Begin your Year Walk journey. This section covers the initial setup and basic navigation through the first forest area. You'll learn the core mechanics and reach your first major milestone.",
+                icon: "bi-play-circle",
+                blocks: [
+                    {
+                        type: "step",
+                        text: "Start a new game and choose your difficulty level"
+                    },
+                    {
+                        type: "tip",
+                        title: "Pro Tip",
+                        content: "Choose \"Normal\" difficulty for your first playthrough. You can always replay on harder difficulties later for additional achievements."
+                    },
+                    {
+                        type: "text",
+                        title: "Understanding the World",
+                        paragraphs: [
+                            "Year Walk is a unique atmospheric adventure game that combines puzzle-solving with Swedish folklore. The game takes place in a mysterious forest where you must navigate through various challenges to complete your year walk ritual. Each area you encounter has its own set of rules and mechanics that you'll need to understand to progress.",
+                            "The forest is filled with supernatural creatures and ancient symbols that hold the key to unlocking the mysteries of the year walk. Pay close attention to environmental details, as they often contain important clues for solving puzzles and avoiding dangerous encounters. The game's minimalist approach means that every visual element serves a purpose in the overall narrative.",
+                            "As you progress through the forest, you'll encounter various obstacles that test both your observation skills and your understanding of the game's world. Some puzzles require careful timing, while others demand patience and careful exploration. Remember that the year walk is not just about reaching the end, but about understanding the journey itself."
+                        ]
+                    },
+                    {
+                        type: "step",
+                        text: "Complete the basic tutorial and learn the controls"
+                    },
+                    {
+                        type: "warning",
+                        title: "Important",
+                        content: "Pay attention to the tutorial! Some mechanics are only explained once and are crucial for later achievements."
+                    },
+                    {
+                        type: "step",
+                        text: "Navigate through the first forest area"
+                    },
+                    {
+                        type: "image",
+                        url: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=400&fit=crop",
+                        alt: "Forest Area",
+                        title: "First Forest Area",
+                        caption: "This is what the first forest area looks like. Look for the glowing mushrooms - they indicate the correct path forward."
+                    },
+                    {
+                        type: "step",
+                        text: "Interact with the guide character and learn about the world"
+                    },
+                    {
+                        type: "achievement",
+                        achievementId: 1
+                    }
+                ]
+            },
+            {
+                id: "the-choice",
+                title: "The Choice",
+                description: "⚠️ SAVE POINT: Create a save file here! This is a critical decision point that affects multiple achievements. The guide character will offer you a map - your choice here determines which path you take and which achievements become available.",
+                icon: "bi-diagram-2",
+                blocks: [
+                    {
+                        type: "branch",
+                        warning: "Create a save file before proceeding!",
+                        options: [
+                            {
+                                id: "accept-map",
+                                title: "Option A: Accept the Map",
+                                description: "Take the map from the guide. This makes navigation easier but affects certain achievements.",
+                                blocks: [
+                                    {
+                                        type: "step",
+                                        text: "Accept the map from the guide character"
+                                    },
+                                    {
+                                        type: "step",
+                                        text: "Use the map to navigate through the forest"
+                                    },
+                                    {
+                                        type: "achievement",
+                                        achievementId: 3
+                                    }
+                                ]
+                            },
+                            {
+                                id: "refuse-map",
+                                title: "Option B: Refuse the Map",
+                                description: "Decline the map and navigate without assistance. This is harder but unlocks different achievements.",
+                                blocks: [
+                                    {
+                                        type: "step",
+                                        text: "Politely refuse the map from the guide"
+                                    },
+                                    {
+                                        type: "step",
+                                        text: "Navigate through the forest without map assistance"
+                                    },
+                                    {
+                                        type: "achievement",
+                                        achievementId: 4
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                id: "forest-navigation-a",
+                title: "Forest Navigation (With Map)",
+                description: "You've chosen to use the map. This path is more straightforward but limits some achievement options. Follow the marked paths and use the map to navigate efficiently through the forest areas.",
+                icon: "bi-eye",
+                blocks: [
+                    {
+                        type: "step",
+                        text: "Follow the marked path on your map"
+                    },
+                    {
+                        type: "step",
+                        text: "Navigate through the second forest area"
+                    },
+                    {
+                        type: "step",
+                        text: "Reach the clearing with the stone circle"
+                    },
+                    {
+                        type: "achievement",
+                        achievementId: 3
+                    }
+                ]
+            },
+            {
+                id: "forest-navigation-b",
+                title: "Forest Navigation (Without Map)",
+                description: "You've chosen to navigate without the map. This path is more challenging but unlocks different achievements. Pay attention to landmarks and use your memory to find your way through the forest.",
+                icon: "bi-eye-slash",
+                blocks: [
+                    {
+                        type: "step",
+                        text: "Navigate using landmarks and memory"
+                    },
+                    {
+                        type: "step",
+                        text: "Find your way through the second forest area"
+                    },
+                    {
+                        type: "step",
+                        text: "Locate the clearing with the stone circle"
+                    },
+                    {
+                        type: "achievement",
+                        achievementId: 4
+                    }
+                ]
+            },
+            {
+                id: "final-approach",
+                title: "Final Approach",
+                description: "Both paths converge here at the stone circle. This is where you'll face the final challenge and potentially unlock the speed-run achievement. Focus on efficiency and completing the remaining objectives quickly.",
+                icon: "bi-check-circle",
+                blocks: [
+                    {
+                        type: "step",
+                        text: "Complete the stone circle ritual"
+                    },
+                    {
+                        type: "step",
+                        text: "Navigate to the final area quickly"
+                    },
+                    {
+                        type: "step",
+                        text: "Complete the final encounter"
+                    },
+                    {
+                        type: "achievement",
+                        achievementId: 5
+                    },
+                    {
+                        type: "achievement",
+                        achievementId: 6
+                    },
+                    {
+                        type: "achievement",
+                        achievementId: 7
+                    }
                 ]
             }
         ]
@@ -35,11 +213,28 @@ const guides = [
         published: true,
         sections: [
             {
+                id: "advanced-techniques",
                 title: "Advanced Techniques",
-                steps: [
-                    "Complete the game once",
-                    "Start New Game+",
-                    "Use advanced strategies"
+                description: "Learn advanced strategies for completing the game more efficiently.",
+                icon: "bi-lightning",
+                blocks: [
+                    {
+                        type: "step",
+                        text: "Complete the game once on any difficulty"
+                    },
+                    {
+                        type: "step",
+                        text: "Start New Game+ from the main menu"
+                    },
+                    {
+                        type: "tip",
+                        title: "Speed Running",
+                        content: "New Game+ carries over your knowledge and some items, making it perfect for speed runs and challenge achievements."
+                    },
+                    {
+                        type: "step",
+                        text: "Use advanced strategies to complete faster"
+                    }
                 ]
             }
         ]
@@ -55,11 +250,28 @@ const guides = [
         published: true,
         sections: [
             {
+                id: "complete-walkthrough",
                 title: "Complete Walkthrough",
-                steps: [
-                    "Find all collectibles",
-                    "Complete all challenges",
-                    "Unlock hidden achievements"
+                description: "Comprehensive guide to unlocking all achievements in Year Walk.",
+                icon: "bi-trophy",
+                blocks: [
+                    {
+                        type: "step",
+                        text: "Find all collectibles throughout the game"
+                    },
+                    {
+                        type: "step",
+                        text: "Complete all challenge achievements"
+                    },
+                    {
+                        type: "warning",
+                        title: "Multiple Playthroughs Required",
+                        content: "Some achievements are mutually exclusive and require multiple playthroughs to unlock them all."
+                    },
+                    {
+                        type: "step",
+                        text: "Unlock hidden achievements by exploring secret areas"
+                    }
                 ]
             }
         ]
