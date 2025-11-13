@@ -18,7 +18,7 @@ async function fetchGuideData(guideId) {
         const achievementsResponse = await fetch(`${window.API_URL}/api/games/${guide.gameId}/achievements`);
         const achievements = await achievementsResponse.json();
 
-        renderGuideHero(guide, achievements);
+        renderGuideHero(guide);
         renderGuideSections(guide.sections, achievements);
     } catch (error) {
         console.error('Error loading guide:', error);
@@ -27,7 +27,7 @@ async function fetchGuideData(guideId) {
     }
 }
 
-function renderGuideHero(guide, achievements) {
+function renderGuideHero(guide) {
     document.title = guide.title + ' - ' + guide.game.name + ' - Achiever';
 
     // Update back button to correct game page
