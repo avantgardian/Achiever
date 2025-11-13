@@ -1,9 +1,8 @@
 function createAchievementMap(guideAchievements) {
-    // Loop through guideAchievements
     const achievementMap = {};
-    for (const achievement of guideAchievements) {
-        achievementMap[achievement.achievementId] = achievement.achievement;
-        
+    
+    for (const item of guideAchievements) {
+        achievementMap[item.achievementId] = item.achievement;
     }
 
     return achievementMap;
@@ -12,7 +11,7 @@ function createAchievementMap(guideAchievements) {
 
 async function fetchGuideData(guideId) {
     try {
-        const response = await fetch(`${window.API_URL}/api/guides/${guideId}`)
+        const response = await fetch(`${window.API_URL}/api/guides/${guideId}`);
         const guide = await response.json();
 
         renderGuideHero(guide);
@@ -31,27 +30,38 @@ function renderGuideHero(guide) {
     const backButton = document.querySelector('.nav-back');
     backButton.href = `game.html?id=${guide.gameId}`;
 
+    // Update hero icon
+    const heroIcon = document.querySelector('.guide-icon-large i');
+    heroIcon.className = `bi ${guide.icon}`;
+
     const categoryBadge = document.querySelector('.guide-badge');
     categoryBadge.textContent = guide.category;
+    categoryBadge.classList.remove('skeleton-text');
 
     const title = document.querySelector('.guide-hero-title')
     title.textContent = guide.title;
+    title.classList.remove('skeleton-text');
 
     const description = document.querySelector('.guide-hero-description')
     description.textContent = guide.description;
+    description.classList.remove('skeleton-text');
 
     const metaStats = document.querySelectorAll('.meta-stat span');
     metaStats[0].textContent = guide.estimatedTime;
+    metaStats[0].classList.remove('skeleton-text');
     metaStats[1].textContent = guide._count.guideAchievements + ' Achievements';
+    metaStats[1].classList.remove('skeleton-text');
 
     const difficultyBadge = document.querySelector('.meta-stat.difficulty');
     difficultyBadge.classList.remove('easy', 'medium', 'hard');
     difficultyBadge.classList.add(guide.difficulty.toLowerCase());
-    difficultyBadge.querySelector('span').textContent = guide.difficulty;
+    const difficultySpan = difficultyBadge.querySelector('span');
+    difficultySpan.textContent = guide.difficulty;
+    difficultySpan.classList.remove('skeleton-text');
 }
 
-function renderGuideSections(sections, guideAchievement) {
-    const achievementMap = createAchievementMap(guideAchievement);
+function renderGuideSections(sections, guideAchievements) {
+    const achievementMap = createAchievementMap(guideAchievements);
     const guideTree = document.querySelector('.guide-tree');
 
     let allSectionsHTML = ''
