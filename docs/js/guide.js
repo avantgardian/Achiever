@@ -12,6 +12,75 @@ async function fetchGuideData(guideId) {
     }
 }
 
+function createAchievementMap(guideAchievements) {
+    // Loop through guideAchievements
+    const achievementMap = {};
+    for (const achievement of guideAchievements) {
+        achievementMap[achievement.achievementId] = achievement.achievement;
+        
+    }
+
+    return achievementMap;
+}
+
+function renderBlocks(blocks, achievementMap) {
+    let allBlocksHTML = '';
+
+    for (const block of blocks) {
+        if (block.type === 'step') {
+            allBlocksHTML += renderStepBlock(block);
+        } else if (block.type === 'tip') {
+            allBlocksHTML += renderTipBlock(block);
+        } else if (block.type === 'warning') {
+            allBlocksHTML += renderWarningBlock(block);
+        } else if (block.type === 'text') {
+            allBlocksHTML += renderTextBlock(block);
+        } else if (block.type === 'image') {
+            allBlocksHTML += renderImageBlock(block);
+        } else if (block.type === 'achievement') {
+            allBlocksHTML += renderAchievementBlock(block, achievementMap);
+        } else if (block.type === 'branch') {
+            allBlocksHTML += renderBranchBlock(block, achievementMap);
+        }
+    }
+
+    return allBlocksHTML;
+}
+
+function renderSection(section, achievementMap) {
+    const blocksHTML = renderBlocks(section.blocks, achievementMap);
+
+    return `
+        <div class="guide-section" data-section="${section.id}">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="bi ${section.icon}"></i>
+                </div>
+                <div class="section-info">
+                    <h2 class="section-title">${section.title}</h2>
+                    <p class="section-description">${section.description}</p>
+                </div>
+            </div>
+            <div class="section-content">
+                ${blocksHTML}
+            </div>
+        </div>
+    `;
+}
+
+function renderGuideSections(sections, guideAchievement) {
+    const achievementMap = createAchievementMap(guideAchievement);
+    const guideTree = document.querySelector('.guide-tree');
+
+    let allSectionsHTML = ''
+
+    for(const section of sections) {
+        allSectionsHTML += renderSection(section, achievementMap);
+    }
+    
+    guideTree.innerHTML = allSectionsHTML;
+}
+
 function renderGuideHero(guide) {
     document.title = guide.title + ' - ' + guide.game.name + ' - Achiever';
 
