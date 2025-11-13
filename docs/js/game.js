@@ -177,8 +177,6 @@ function renderGuides(guides) {
 }
 
 async function incrementGameViews(gameId) {
-    // 4. Make POST request to your API endpoint
-    // 5. After successful response, save to sessionStorage
     const alreadyViewed = sessionStorage.getItem(`viewed_game_${gameId}`);
     if (alreadyViewed) {
         return;

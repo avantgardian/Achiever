@@ -1,3 +1,15 @@
+function createAchievementMap(guideAchievements) {
+    // Loop through guideAchievements
+    const achievementMap = {};
+    for (const achievement of guideAchievements) {
+        achievementMap[achievement.achievementId] = achievement.achievement;
+        
+    }
+
+    return achievementMap;
+}
+
+
 async function fetchGuideData(guideId) {
     try {
         const response = await fetch(`${window.API_URL}/api/guides/${guideId}`)
@@ -12,15 +24,64 @@ async function fetchGuideData(guideId) {
     }
 }
 
-function createAchievementMap(guideAchievements) {
-    // Loop through guideAchievements
-    const achievementMap = {};
-    for (const achievement of guideAchievements) {
-        achievementMap[achievement.achievementId] = achievement.achievement;
-        
-    }
+function renderGuideHero(guide) {
+    document.title = guide.title + ' - ' + guide.game.name + ' - Achiever';
 
-    return achievementMap;
+    // Update back button to correct game page
+    const backButton = document.querySelector('.nav-back');
+    backButton.href = `game.html?id=${guide.gameId}`;
+
+    const categoryBadge = document.querySelector('.guide-badge');
+    categoryBadge.textContent = guide.category;
+
+    const title = document.querySelector('.guide-hero-title')
+    title.textContent = guide.title;
+
+    const description = document.querySelector('.guide-hero-description')
+    description.textContent = guide.description;
+
+    const metaStats = document.querySelectorAll('.meta-stat span');
+    metaStats[0].textContent = guide.estimatedTime;
+    metaStats[1].textContent = guide._count.guideAchievements + ' Achievements';
+
+    const difficultyBadge = document.querySelector('.meta-stat.difficulty');
+    difficultyBadge.classList.remove('easy', 'medium', 'hard');
+    difficultyBadge.classList.add(guide.difficulty.toLowerCase());
+    difficultyBadge.querySelector('span').textContent = guide.difficulty;
+}
+
+function renderGuideSections(sections, guideAchievement) {
+    const achievementMap = createAchievementMap(guideAchievement);
+    const guideTree = document.querySelector('.guide-tree');
+
+    let allSectionsHTML = ''
+
+    for(const section of sections) {
+        allSectionsHTML += renderSection(section, achievementMap);
+    }
+    
+    guideTree.innerHTML = allSectionsHTML;
+}
+
+function renderSection(section, achievementMap) {
+    const blocksHTML = renderBlocks(section.blocks, achievementMap);
+
+    return `
+        <div class="guide-section" data-section="${section.id}">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i class="bi ${section.icon}"></i>
+                </div>
+                <div class="section-info">
+                    <h2 class="section-title">${section.title}</h2>
+                    <p class="section-description">${section.description}</p>
+                </div>
+            </div>
+            <div class="section-content">
+                ${blocksHTML}
+            </div>
+        </div>
+    `;
 }
 
 function renderBlocks(blocks, achievementMap) {
@@ -47,61 +108,94 @@ function renderBlocks(blocks, achievementMap) {
     return allBlocksHTML;
 }
 
-function renderSection(section, achievementMap) {
-    const blocksHTML = renderBlocks(section.blocks, achievementMap);
 
+function renderStepBlock(block) {
     return `
-        <div class="guide-section" data-section="${section.id}">
-            <div class="section-header">
-                <div class="section-icon">
-                    <i class="bi ${section.icon}"></i>
-                </div>
-                <div class="section-info">
-                    <h2 class="section-title">${section.title}</h2>
-                    <p class="section-description">${section.description}</p>
-                </div>
+        <div class="step-item">
+            <div class="step-checkbox"></div>
+            <p class="step-text">${block.text}</p>
+        </div>
+    `;
+}
+
+function renderTipBlock(block) {
+    return `
+        <div class="content-block tip">
+            <div class="content-icon">
+                <i class="bi bi-lightbulb"></i>
             </div>
-            <div class="section-content">
-                ${blocksHTML}
+            <div class="content-text">
+                <h4 class="content-title">${block.title}</h4>
+                <p class="content-description">${block.content}</p>
             </div>
         </div>
     `;
 }
 
-function renderGuideSections(sections, guideAchievement) {
-    const achievementMap = createAchievementMap(guideAchievement);
-    const guideTree = document.querySelector('.guide-tree');
-
-    let allSectionsHTML = ''
-
-    for(const section of sections) {
-        allSectionsHTML += renderSection(section, achievementMap);
-    }
-    
-    guideTree.innerHTML = allSectionsHTML;
+function renderWarningBlock(block) {
+    return `
+        <div class="content-block warning">
+            <div class="content-icon">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <div class="content-text">
+                <h4 class="content-title">${block.title}</h4>
+                <p class="content-description">${block.content}</p>
+            </div>
+        </div>
+    `;
 }
 
-function renderGuideHero(guide) {
-    document.title = guide.title + ' - ' + guide.game.name + ' - Achiever';
+function renderTextBlock(block) {
+    const paragraphsHTML = block.paragraphs.map(p => `<p class="content-description">${p}</p>`).join('');
 
-    const categoryBadge = document.querySelector('.guide-badge');
-    categoryBadge.textContent = guide.category;
-
-    const title = document.querySelector('.guide-hero-title')
-    title.textContent = guide.title;
-
-    const description = document.querySelector('.guide-hero-description')
-    description.textContent = guide.description;
-
-    const metaStats = document.querySelectorAll('.meta-stat span');
-    metaStats[0].textContent = guide.estimatedTime;
-    metaStats[1].textContent = guide._count.guideAchievements + ' Achievements';
-
-    const difficultyBadge = document.querySelector('.meta-stat.difficulty');
-    difficultyBadge.classList.remove('easy', 'medium', 'hard');
-    difficultyBadge.classList.add(guide.difficulty.toLowerCase());
-    difficultyBadge.querySelector('span').textContent = guide.difficulty;
+    return `
+        <div class="content-block text">
+            <div class="content-text">
+                <h4 class="content-title">${block.title}</h4>
+                ${paragraphsHTML}
+            </div>
+        </div>
+    `;
 }
+
+function renderImageBlock(block) {
+    return `
+        <div class="content-block image">
+            <div class="content-image">
+                <img src="${block.url}" alt="${block.alt}">
+            </div>
+            <div class="content-text">
+                <h4 class="content-title">${block.title}</h4>
+                <p class="content-description">${block.caption}</p>
+            </div>
+        </div>
+    `;
+}
+
+function renderAchievementBlock(block, achievementMap) {
+    const achievement = achievementMap[block.achievementId];
+
+    return `
+        <div class="achievement-milestone">
+            <div class="milestone-checkbox"></div>
+            <div class="milestone-info">
+                <div class="milestone-icon">
+                    <img src="${achievement.iconUrl}" alt="${achievement.name}">
+                </div>
+                <div class="milestone-text">
+                    <h4 class="milestone-title">${achievement.name}</h4>
+                    <p class="milestone-desc">${achievement.description}</p>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function renderBranchBlock(block, achievementMap) { // TODO: Implement for MVP v2
+    return '';
+}
+
 
 async function incrementGuideViews(guideId) {
     const alreadyViewed = sessionStorage.getItem(`viewed_guide_${guideId}`);
