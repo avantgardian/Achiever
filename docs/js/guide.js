@@ -202,6 +202,7 @@ function renderAchievementBlock(block, achievementMap) {
     `;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function renderBranchBlock(block, achievementMap) { // TODO: Implement for MVP v2
     return '';
 }
