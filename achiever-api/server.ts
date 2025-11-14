@@ -134,6 +134,9 @@ app.get('/api/games/:gameId/guides', async (req: Request, res: Response) => {
                         guideAchievements: true
                     }
                 }
+            },
+            orderBy: {
+                id: 'asc'
             }
         });
         
