@@ -102,6 +102,7 @@ const TEST_GAMES = [
 
 const TEST_GUIDES = [
     {
+        id: 4,
         gameId: 1, // Year Walk
         title: "Story Walkthrough",
         description: "Complete the main story and unlock all story-related achievements. Perfect for first-time players.",
@@ -300,6 +301,7 @@ const TEST_GUIDES = [
         ]
     },
     {
+        id: 5,
         gameId: 1, // Year Walk
         title: "New Game+",
         description: "Master the game with advanced techniques and unlock hidden achievements.",
@@ -320,6 +322,7 @@ const TEST_GUIDES = [
         ]
     },
     {
+        id: 6,
         gameId: 1, // Year Walk
         title: "100% Completion",
         description: "Unlock every achievement in the game. Includes collectibles, hidden secrets, and challenge achievements.",
