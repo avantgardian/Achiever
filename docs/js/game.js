@@ -32,6 +32,40 @@ async function fetchGuides(gameId) {
     return await response.json();
 }
 
+function countGuideAchievementBlocks(sections = []) {
+    if (!Array.isArray(sections)) {
+        return 0;
+    }
+
+    let total = 0;
+
+    sections.forEach((section) => {
+        total += countAchievementBlocks(section.blocks || []);
+    });
+
+    return total;
+}
+
+function countAchievementBlocks(blocks = []) {
+    if (!Array.isArray(blocks)) {
+        return 0;
+    }
+
+    let total = 0;
+
+    blocks.forEach((block) => {
+        if (block.type === 'achievement') {
+            total += 1;
+        } else if (block.type === 'branch' && Array.isArray(block.options)) {
+            block.options.forEach((option) => {
+                total += countAchievementBlocks(option.blocks || []);
+            });
+        }
+    });
+
+    return total;
+}
+
 function renderGameHeader(game) {
     // Page Title
     document.title = game.name + ' - Achiever';
@@ -137,6 +171,7 @@ function renderGuides(guides) {
     let allGuidesCards = '';
 
     guides.forEach(guide => {
+        const achievementCount = countGuideAchievementBlocks(guide.sections);
         const cardHTML = `
             <div class="guide-card" onclick="window.location.href='guide.html?id=${guide.id}'">
                     <div class="guide-header">
@@ -154,7 +189,7 @@ function renderGuides(guides) {
                         <div class="guide-stats">
                             <div class="guide-stat">
                                 <i class="bi bi-trophy"></i>
-                                <span>${guide._count.guideAchievements} Achievements</span>
+                                <span>${achievementCount} Achievements</span>
                             </div>
                             <div class="guide-stat">
                                 <i class="bi bi-clock"></i>

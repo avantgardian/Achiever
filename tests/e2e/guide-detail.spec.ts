@@ -23,4 +23,16 @@ test.describe('Guide Detail Page', () => {
 
         await expect(page).toHaveTitle('Story Walkthrough - Year Walk - Achiever');
     });
+
+    test('Section JSON hydration', async ({ page }) => {
+        await page.goto('/guide.html?id=4');
+        await page.waitForSelector('.guide-tree .skeleton-card', { state: 'detached' }); // Wait for the skeleton cards to be detached
+
+        const gettingStarted = page.locator('.guide-section').first();
+        await expect(gettingStarted).toHaveAttribute('data-section', 'getting-started');
+        await expect(gettingStarted.locator('.bi-play-circle')).toBeVisible();
+        await expect(gettingStarted.locator('.section-title')).toHaveText('Getting Started');
+        await expect(gettingStarted.locator('.section-description')).toContainText(/Begin your Year Walk journey./);
+        
+    });
 });
