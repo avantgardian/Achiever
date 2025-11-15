@@ -56,10 +56,6 @@ function countAchievementBlocks(blocks = []) {
     blocks.forEach((block) => {
         if (block.type === 'achievement') {
             total += 1;
-        } else if (block.type === 'branch' && Array.isArray(block.options)) {
-            block.options.forEach((option) => {
-                total += countAchievementBlocks(option.blocks || []);
-            });
         }
     });
 
