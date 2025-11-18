@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 const guides = [
     {
-        gameId: 1, // Year Walk
+        gameId: 1,
         title: "Story Walkthrough",
         description: "Complete the main story and unlock all story-related achievements. Perfect for first-time players.",
         difficulty: "EASY" as Difficulty,
@@ -75,48 +75,33 @@ const guides = [
                 icon: "bi-diagram-2",
                 blocks: [
                     {
-                        type: "branch",
-                        warning: "Create a save file before proceeding!",
-                        options: [
-                            {
-                                id: "accept-map",
-                                title: "Option A: Accept the Map",
-                                description: "Take the map from the guide. This makes navigation easier but affects certain achievements.",
-                                blocks: [
-                                    {
-                                        type: "step",
-                                        text: "Accept the map from the guide character"
-                                    },
-                                    {
-                                        type: "step",
-                                        text: "Use the map to navigate through the forest"
-                                    },
-                                    {
-                                        type: "achievement",
-                                        achievementId: 3
-                                    }
-                                ]
-                            },
-                            {
-                                id: "refuse-map",
-                                title: "Option B: Refuse the Map",
-                                description: "Decline the map and navigate without assistance. This is harder but unlocks different achievements.",
-                                blocks: [
-                                    {
-                                        type: "step",
-                                        text: "Politely refuse the map from the guide"
-                                    },
-                                    {
-                                        type: "step",
-                                        text: "Navigate through the forest without map assistance"
-                                    },
-                                    {
-                                        type: "achievement",
-                                        achievementId: 4
-                                    }
-                                ]
-                            }
+                        type: "warning",
+                        title: "Decision Point",
+                        content: "Create a save file before choosing your path. Each option unlocks different achievements."
+                    },
+                    {
+                        type: "text",
+                        title: "Choose Your Path",
+                        paragraphs: [
+                            "Accepting the map gives you a guided route through the forest at the cost of certain challenge achievements.",
+                            "Refusing the map keeps the experience authentic and unlocks exclusive achievements for navigating unaided."
                         ]
+                    },
+                    {
+                        type: "step",
+                        text: "Accept the map from the guide character for the assisted route"
+                    },
+                    {
+                        type: "step",
+                        text: "Refuse the map to tackle the forest without guidance"
+                    },
+                    {
+                        type: "achievement",
+                        achievementId: 3
+                    },
+                    {
+                        type: "achievement",
+                        achievementId: 4
                     }
                 ]
             },
@@ -203,7 +188,7 @@ const guides = [
         ]
     },
     {
-        gameId: 1, // Year Walk
+        gameId: 1,
         title: "New Game+",
         description: "Master the game with advanced techniques and unlock hidden achievements.",
         difficulty: "MEDIUM" as Difficulty,
@@ -240,7 +225,7 @@ const guides = [
         ]
     },
     {
-        gameId: 1, // Year Walk
+        gameId: 1,
         title: "100% Completion",
         description: "Unlock every achievement in the game. Includes collectibles, hidden secrets, and challenge achievements.",
         difficulty: "HARD" as Difficulty,

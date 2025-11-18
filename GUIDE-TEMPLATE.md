@@ -15,7 +15,6 @@ All guides are stored in the `sections` field as JSON in the database. Each sect
 - `text` - Rich text content with multiple paragraphs
 - `image` - Image with caption
 - `achievement` - Achievement milestone (references achievement by ID)
-- `branch` - Decision point with multiple paths (NOT YET IMPLEMENTED - stub only)
 
 ---
 
@@ -67,7 +66,6 @@ All guides are stored in the `sections` field as JSON in the database. Each sect
 - `bi-star-fill` - Special/featured
 - `bi-gem` - Collectibles/100%
 - `bi-trophy` - Achievements
-- `bi-diagram-2` - Branches/choices
 - `bi-eye` - Exploration
 - `bi-check-circle` - Completion
 
@@ -231,38 +229,6 @@ Reference an achievement by its database ID. The achievement data (name, descrip
 
 ---
 
-### Branch Block (NOT YET IMPLEMENTED)
-
-⚠️ **Currently returns empty string - stub for future implementation**
-
-Decision points with multiple paths. Each path can have its own blocks.
-
-```json
-{
-    "type": "branch",
-    "warning": "Save your game before this choice!",
-    "options": [
-        {
-            "id": "option-a",
-            "title": "Option A: Choice Title",
-            "description": "What happens if you choose this",
-            "blocks": [
-                // Blocks for this path
-            ]
-        },
-        {
-            "id": "option-b",
-            "title": "Option B: Alternative Choice",
-            "description": "What happens if you choose this instead",
-            "blocks": [
-                // Blocks for this path
-            ]
-        }
-    ]
-}
-```
-
----
 
 ## Common Patterns
 
@@ -364,7 +330,7 @@ Common category names (you can use any string):
 This JSON structure is compatible with Editor.js, a visual block editor. Future features:
 - Drag-and-drop block ordering
 - Visual editing of content
-- Custom block types for achievements and branches
+- Custom block types for achievements
 - No migration needed - same JSON structure!
 
 ---

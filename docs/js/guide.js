@@ -124,8 +124,6 @@ function renderBlocks(blocks, achievementMap) {
             allBlocksHTML += renderImageBlock(block);
         } else if (block.type === 'achievement') {
             allBlocksHTML += renderAchievementBlock(block, achievementMap);
-        } else if (block.type === 'branch') {
-            allBlocksHTML += renderBranchBlock(block, achievementMap);
         }
     }
 
@@ -215,12 +213,6 @@ function renderAchievementBlock(block, achievementMap) {
         </div>
     `;
 }
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function renderBranchBlock(block, achievementMap) { // TODO: Implement for MVP v2
-    return '';
-}
-
 
 async function incrementGuideViews(guideId) {
     const alreadyViewed = sessionStorage.getItem(`viewed_guide_${guideId}`);
