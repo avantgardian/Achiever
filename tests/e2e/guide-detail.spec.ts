@@ -14,7 +14,7 @@ test.describe('Guide Detail Page', () => {
 
         const metaStats = page.locator('.meta-stat span');
         await expect(metaStats.nth(0)).toHaveText('2-3 hours');
-        await expect(metaStats.nth(1)).toHaveText('6 Achievements');
+        await expect(metaStats.nth(1)).toHaveText('8 Achievements');
 
         const difficulty = page.locator('.meta-stat.difficulty');
         await expect(difficulty).toHaveClass(/easy/);
