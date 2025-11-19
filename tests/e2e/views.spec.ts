@@ -80,4 +80,35 @@ test.describe.serial('Views Basics', () => {
         // Verify no POST happened on reload
         expect(postHappened).toBe(false);
     });
+
+    test('does not increment guide views on page refresh', async ({ page }) => {
+        const responsePromise = page.waitForResponse(resp => 
+            resp.url().includes('/api/guides/4/view') && 
+            resp.request().method() === 'POST'
+        );
+        
+        await page.goto('/guide.html?id=4');
+        await expect(page.locator('.guide-hero-title')).toContainText('Story Walkthrough');
+        await responsePromise;
+        
+        // Verify sessionStorage was set
+        const hasSessionKey = await page.evaluate(() => 
+            sessionStorage.getItem('viewed_guide_4') !== null
+        );
+        expect(hasSessionKey).toBe(true);
+        
+        // Setup listener for POST (should NOT happen on reload)
+        let postHappened = false;
+        page.on('request', req => {
+            if (req.url().includes('/api/guides/4/view') && req.method() === 'POST') {
+                postHappened = true;
+            }
+        });
+        
+        await page.reload();
+        await expect(page.locator('.guide-hero-title')).toContainText('Story Walkthrough');
+        
+        // Verify no POST happened on reload
+        expect(postHappened).toBe(false);
+    });
 });

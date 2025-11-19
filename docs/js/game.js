@@ -191,6 +191,10 @@ function renderGuides(guides) {
                                 <i class="bi bi-clock"></i>
                                 <span>${guide.estimatedTime}</span>
                             </div>
+                            <div class="guide-stat">
+                                <i class="bi bi-eye-fill"></i>
+                                <span>${guide.views} Views</span>
+                            </div>
                         </div>
                     </div>
                     <div class="guide-footer">
