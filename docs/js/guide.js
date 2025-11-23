@@ -1,6 +1,6 @@
 function createAchievementMap(achievements) {
     const achievementMap = {};
-    
+
     for (const achievement of achievements) {
         achievementMap[achievement.id] = achievement;
     }
@@ -80,10 +80,10 @@ function renderGuideSections(sections, achievements) {
 
     let allSectionsHTML = ''
 
-    for(const section of sections) {
+    for (const section of sections) {
         allSectionsHTML += renderSection(section, achievementMap);
     }
-    
+
     guideTree.innerHTML = allSectionsHTML;
 }
 

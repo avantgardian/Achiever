@@ -26,7 +26,8 @@ const GAMES_TO_SEED = [
     { name: 'Ship Graveyard Simulator 2', steamAppId: 2201940 },
     { name: 'Deep Rock Galactic Sutvivors', steamAppId: 2321470 },
     { name: 'Tormented Souls 2', steamAppId: 2464280 },
-    { name: 'Red Dead Redemption 2', steamAppId: 1174180 }
+    { name: 'Red Dead Redemption 2', steamAppId: 1174180 },
+    { name: 'Divinity Original Sin Enhanced Edition', steamAppId: 373420 }
 ]
 
 async function seedGames() {
@@ -75,4 +76,4 @@ async function seedGames() {
 
 seedGames();
 
-export {};
+export { };

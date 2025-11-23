@@ -26,7 +26,8 @@ const GAMES_TO_SEED = [
     2201940,  // Ship Graveyard Simulator 2
     2321470,  // Deep Rock Galactic Survivors
     2464280,  // Tormented Souls 2
-    1174180   // Red Dead Redemption 2
+    1174180,  // Red Dead Redemption 2
+    373420    // Divinity Original Sin Enhanced Edition
 ];
 
 async function seedAchievements() {
@@ -114,5 +115,5 @@ async function seedAchievements() {
 // Run the seed function
 seedAchievements();
 
-export {};
+export { };
 
